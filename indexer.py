@@ -30,6 +30,7 @@ class Indexer:
 
         for string in self.text_set:
             text = re.findall(text_regex, string)
+            links = re.findall(link_regex, string)
             for word in text:
 
 
