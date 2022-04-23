@@ -1,3 +1,4 @@
+from posixpath import split
 import sys
 from tokenize import String
 from typing import Set
@@ -11,6 +12,7 @@ class Indexer:
         else:
             self.text_set = set()
             self.id_to_title = {}
+            self.link_to_links = {}
             self.parse(sys.argv[1])
 
     def parse(self, input_file : String) -> None:
@@ -31,6 +33,20 @@ class Indexer:
         for string in self.text_set:
             text = re.findall(text_regex, string)
             links = re.findall(link_regex, string)
+            for link in links:
+                split_link = link.split('|')
+                if len(split_link) == 1:
+                    self.text_set.add(split_link[0])
+                    self.link_to_links.update(split_link[0], )
+                elif len(split_link) == 2:
+                    self.text_set.add(split_link[1])
+                    self.link_to_links.add(split_link[0])
+
+                    
+                    
+
+
+
             for word in text:
 
 
