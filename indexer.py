@@ -9,13 +9,14 @@ from file_io import write_title_file
 
 class Indexer:
     def __init__(self) -> None:
+        self.corpus = set()
+        self.id_to_title = {}
+        self.link_to_links = {}
         if len(sys.argv) - 1 != 4:
             print("Fewer than four arguments!")
         else:
-            self.corpus = set()
-            self.id_to_title = {}
-            self.link_to_links = {}
             self.parse(sys.argv[1])
+            self.print_corpus()
             write_title_file(sys.argv[2], self.id_to_title)
 
     def parse(self, input_file : String) -> None:
@@ -26,7 +27,7 @@ class Indexer:
             for word in wiki_page.find('title').text.strip().lower().split():
                 self.corpus.add(word)
             
-            self.id_to_title.update(int(wiki_page.find('id').text.strip()), wiki_page.find('title').text.strip())
+            self.id_to_title.add(int(wiki_page.find('id').text.strip()), wiki_page.find('title').text.strip())
 
             for word in wiki_page.find('text').text.strip().lower().split():
                 self.corpus.add(wiki_page.find('text').text.strip().lower())
@@ -46,15 +47,8 @@ class Indexer:
                 elif len(split_link) == 2:
                     self.corpus.add(split_link[1])
                     self.link_to_links.add(split_link[0])
-
-                    
-                    
-
-
-
-            for word in text:
-
-
-
-        
-    
+                else:
+                    break
+    def print_corpus(self):
+        for word in self.corpus:
+            print(word)
