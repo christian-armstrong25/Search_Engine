@@ -78,8 +78,8 @@ class Indexer:
         total_docs = len(self.ids_to_titles)
 
         for word in self.words_to_doc_relevance:
-            for page in self.words_to_doc_relevance[word]
-            self.words_to_doc_relevance[word][page] *= math.log(
+            for page in self.words_to_doc_relevance[word]:
+                self.words_to_doc_relevance[word][page] *= math.log(
                 total_docs/len(self.words_to_doc_relevance[word]))
 
         write_words_file(self.words_to_doc_relevance, sys.argv[4])
