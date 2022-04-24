@@ -52,31 +52,3 @@ class Indexer:
                     self.link_to_title[split_link[0]] = [].add(wiki_page.find('title').text.strip())
                 else:
                     break
-                
-            
-    def tokenize(self) -> None:
-        self.old_corpus = self.corpus 
-        self.corpus = set()
-        link_regex = '''\[\[[^\[]+?\]\]'''
-        text_regex = '''[a-zA-Z0-9]+'[a-zA-Z0-9]+|[a-zA-Z0-9]+'''
-        STOP_WORDS = set(stopwords.words('english'))
-
-        for string in self.old_corpus:
-            text = re.findall(text_regex, string)
-            links = re.findall(link_regex, string)
-            for word in text:
-                if word not in STOP_WORDS:
-                    stemmer = PorterStemmer(word)
-                    self.corpus.add(word)
-
-            for link in links:
-                str(link).strip("[]")
-                split_link = str(link).split('|')
-                if len(split_link) == 1:
-                    self.corpus.add(split_link[0])
-                    self.link_to_links[split_link[0]] = []
-                elif len(split_link) == 2:
-                    self.corpus.add(split_link[1])
-                    self.link_to_links[split_link[0]] = []
-                else:
-                    break
