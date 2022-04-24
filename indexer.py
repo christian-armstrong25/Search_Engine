@@ -10,15 +10,15 @@ class Indexer:
     def __init__(self) -> None:
         self.corpus = set()
                
-        self.id_to_title = {}
+        self.ids_to_titles = {}
         self.link_to_title = {}
-        self.word_to_id_to_count = {}
+        self.words_to_doc_relevance = {}
 
         if len(sys.argv) - 1 != 4:
             print("Fewer than four arguments!")
         else:
             self.parse(sys.argv[1])
-            write_title_file(sys.argv[2], self.id_to_title)
+            write_title_file(sys.argv[2], self.ids_to_titles)
 
     def parse(self, input_file : String) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
@@ -33,7 +33,7 @@ class Indexer:
                 if title_word not in STOP_WORDS:
                     self.corpus.add(stemmer.stem(title_word))
             
-            self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip().lower()
+            self.ids_to_titles[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip().lower()
                 
             for text_word in re.findall(text_regex, wiki_page.find('text').text.strip().lower()):
                 if text_word not in STOP_WORDS:
@@ -56,5 +56,5 @@ class Indexer:
                 else:
                     break
     
-    def term_frequency(self):
+    def term_frequency(self, input_file : String):
         
