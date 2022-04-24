@@ -1,0 +1,12 @@
+<xml>
+    <page>
+        <title>Geese</title>
+        <id>1</id>
+        <text>A wild goose eats only long grasses.</text>
+    </page>
+    <page>
+        <title>Cows</title>
+        <id>2</id>
+        <text>A cow is a dog only in upside down land. [[Geese|click here for more animal]]</text>
+    </page>
+</xml>
