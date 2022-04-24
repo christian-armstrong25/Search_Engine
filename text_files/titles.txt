@@ -1,2 +1,2 @@
-1::Geese
-2::Cows
+1::geese
+2::cows

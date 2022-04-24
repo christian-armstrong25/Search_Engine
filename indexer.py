@@ -27,7 +27,7 @@ class Indexer:
         for wiki_page in wiki_xml_root:
             self.corpus.add(wiki_page.find('title').text.strip().lower())
             
-            self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip()
+            self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip().lower()
                 
             self.corpus.add(wiki_page.find('text').text.strip().lower())
             
