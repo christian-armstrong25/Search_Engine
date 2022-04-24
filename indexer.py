@@ -18,7 +18,6 @@ class Indexer:
         else:
             self.parse(sys.argv[1])
             write_title_file(sys.argv[2], self.id_to_title)
-            self.tokenize()
 
     def parse(self, input_file : String) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
