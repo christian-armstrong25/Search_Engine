@@ -23,7 +23,7 @@ class Indexer:
         wiki_xml_root = wiki_tree.getroot()
 
         for wiki_page in wiki_xml_root:
-            self.corpus.add(wiki_page.find('title').text.strip().lower().split())
+            self.corpus.add(wiki_page.find('title').text.strip().lower())
             
             self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip()
                 
