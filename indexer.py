@@ -1,5 +1,6 @@
 import sys
 from tokenize import String
+from turtle import title
 import xml.etree.ElementTree as et
 import re
 from file_io import write_title_file, write_words_file
@@ -12,7 +13,8 @@ class Indexer:
     def __init__(self) -> None:
         self.corpus = set()  # set of all words in the given XML file
         self.ids_to_titles = {}  # maps page ids to page titles
-        self.links_from_id = {}  # maps an id to all the titles it links to
+        self.links_from_page = {}  # maps an id to all the titles it links to
+        self.ids_to_pageranks = {}  # maps ids to pageranks
 
         # double dictionary from words, to the documents they appear in, to
         # the relevance of those documents to that word according to tf and idf
@@ -70,10 +72,10 @@ class Indexer:
                 if page_id in self.links_to_id:
                     # ignores links from a page to itself
                     if split_link[link] != wiki_page.find('title').text.strip():
-                        self.links_from_id[page_id].add(split_link[0])
+                        self.links_from_page[page_id].add(split_link[0])
                 else:
                     # set only contains unique links
-                    self.links_from_id[page_id] = set(split_link[0])
+                    self.links_from_page[page_id] = set(split_link[0])
 
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
@@ -117,23 +119,16 @@ class Indexer:
                     total_docs/len(self.words_to_doc_relevance[word]))
 
         epsilon = 0.15
-        links_to_everything_dict = self.ids_to_titles
+        self.ids_to_pageranks = self.ids_to_titles
 
-        for ids in links_to_everything_dict:
-            links_to_everything_dict[ids] = (1 / total_docs)
-
-        for title_id in self.ids_to_titles:
-            if title_id in self.links_from_id:  # if a page has a link to another
-                weight_dict = {}
-                for linked_page in self.links_from_id[page]:
-                    for linked_page_id in self.ids_to_titles:
-                        if self.ids_to_titles[linked_page_id] == linked_page:
-                            weight_dict[linked_page_id] = (epsilon / total_docs) +\
-                                ((1 - epsilon) *
-                                 (1 / len(self.links_to_id[title_id])))
-                        else:
-                            weight_dict[linked_page_id] = (
-                                epsilon / total_docs)
-                self.links_to_dict[title_id] = weight_dict
-            else:  # if a page does not have a link to another
-                self.links_to_dict[title_id] = links_to_everything_dict
+        for page in self.ids_to_titles:
+            self.ids_to_pageranks[page] = {}
+            for link in self.ids_to_titles:
+                if page not in self.links_from_page:  # page links to nothing
+                    self.ids_to_pageranks[page][link] = (1 / total_docs)
+                elif link in self.links_from_page[page]:  # if k links to j
+                    self.ids_to_pageranks[page][link] = (epsilon / total_docs) +\
+                        ((1 - epsilon) * (1 / len(self.links_to_id[page])))
+                else:  # otherwise
+                    self.ids_to_pageranks[page][link] = (
+                        epsilon / total_docs)
