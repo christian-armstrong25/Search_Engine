@@ -39,7 +39,7 @@ class Indexer:
                     self.corpus.add(stemmer.stem(text_word))
 
             for link in re.findall(link_regex, wiki_page.find('text').text):
-                split_link = str(link.strip().strip("[[]]").strip()).split('|')
+                split_link = str(link).strip().strip("[[]]").strip().split('|')
                 if len(split_link) == 1:
                     self.corpus.add(split_link[0])
                     if split_link[0] in self.link_to_title:
