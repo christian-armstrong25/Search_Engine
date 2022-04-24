@@ -21,15 +21,27 @@ class Indexer:
             self.tokenize()
 
     def parse(self, input_file : String) -> None:
+        link_regex = '''\[\[[^\[]+?\]\]'''
+        text_regex = '''[a-zA-Z0-9]+'[a-zA-Z0-9]+|[a-zA-Z0-9]+'''
+        STOP_WORDS = set(stopwords.words('english'))
+        stemmer = PorterStemmer()
         wiki_tree = et.parse(input_file)
         wiki_xml_root = wiki_tree.getroot()
 
         for wiki_page in wiki_xml_root:
-            self.corpus.add(wiki_page.find('title').text.strip().lower())
+            for title_word in re.findall(text_regex, wiki_page.find('title').text.strip().lower()):
+                if title_word not in STOP_WORDS:
+                    self.corpus.add(stemmer.stem(title_word))
             
             self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip().lower()
                 
-            self.corpus.add(wiki_page.find('text').text.strip().lower())
+            for text_word in re.findall(text_regex, wiki_page.find('text').text.strip().lower()):
+                if text_word not in STOP_WORDS:
+                    self.corpus.add(stemmer.stem(text_word))
+
+            for link in re.findall(link_regex, wiki_page.find('text').text.strip().strip("[]").strip()):
+                
+                
             
     def tokenize(self) -> None:
         self.old_corpus = self.corpus 
