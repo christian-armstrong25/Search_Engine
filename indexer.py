@@ -47,6 +47,7 @@ class Indexer:
                     self.corpus.add(word)
 
             for link in links:
+                str(link).strip("[]")
                 split_link = str(link).split('|')
                 if len(split_link) == 1:
                     self.corpus.add(split_link[0])
