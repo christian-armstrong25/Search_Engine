@@ -16,7 +16,6 @@ class Indexer:
             print("Fewer than four arguments!")
         else:
             self.parse(sys.argv[1])
-            self.print_corpus()
             write_title_file(sys.argv[2], self.id_to_title)
 
     def parse(self, input_file : String) -> None:
@@ -49,6 +48,7 @@ class Indexer:
                     self.link_to_links[split_link[0]] = []
                 else:
                     break
+
     def print_corpus(self):
         for word in self.corpus:
             print(word)
