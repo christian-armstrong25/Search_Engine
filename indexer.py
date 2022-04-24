@@ -23,13 +23,11 @@ class Indexer:
         wiki_xml_root = wiki_tree.getroot()
 
         for wiki_page in wiki_xml_root:
-            for word in wiki_page.find('title').text.strip().lower().split():
-                self.corpus.add(word)
+            self.corpus.add(wiki_page.find('title').text.strip().lower().split())
             
             self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip()
-
-            for word in wiki_page.find('text').text.strip().lower().split():
-                self.corpus.add(wiki_page.find('text').text.strip().lower())
+                
+            self.corpus.add(wiki_page.find('text').text.strip().lower())
             
     def tokenize(self) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
