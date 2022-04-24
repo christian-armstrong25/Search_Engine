@@ -2,9 +2,10 @@ import sys
 from tokenize import String
 import xml.etree.ElementTree as et
 import re
-from file_io import write_title_file
+from file_io import write_title_file, write_words_file
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
+import math
 
 
 class Indexer:
@@ -73,3 +74,12 @@ class Indexer:
             for word in self.words_to_doc_relevance:
                 if page_id in self.words_to_doc_relevance[word]:
                     self.words_to_doc_relevance[word][page_id] /= max_word_count_on_page
+
+        total_docs = len(self.ids_to_titles)
+
+        for word in self.words_to_doc_relevance:
+            for page in self.words_to_doc_relevance[word]
+            self.words_to_doc_relevance[word][page] *= math.log(
+                total_docs/len(self.words_to_doc_relevance[word]))
+
+        write_words_file(self.words_to_doc_relevance, sys.argv[4])
