@@ -38,8 +38,8 @@ class Indexer:
                 if text_word not in STOP_WORDS:
                     self.corpus.add(stemmer.stem(text_word))
 
-            for link in re.findall(link_regex, wiki_page.find('text').text.strip().strip("[]").strip()):
-                split_link = str(link).split('|')
+            for link in re.findall(link_regex, wiki_page.find('text').text):
+                split_link = str(link.strip().strip("[[]]").strip()).split('|')
                 if len(split_link) == 1:
                     self.corpus.add(split_link[0])
                     if split_link[0] in self.link_to_title:
