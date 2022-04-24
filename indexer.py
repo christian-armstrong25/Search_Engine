@@ -44,13 +44,13 @@ class Indexer:
                 if len(split_link) == 1:
                     self.corpus.add(split_link[0])
                     if split_link[0] in self.link_to_title:
-                        self.link_to_title[split_link[0]].append(wiki_page.find('title').text.strip())
+                        list(self.link_to_title[split_link[0]]).append(wiki_page.find('title').text.strip())
                     else:
                         self.link_to_title[split_link[0]] = [wiki_page.find('title').text.strip()]
                 elif len(split_link) == 2:
                     self.corpus.add(split_link[1])
                     if split_link[0] in self.link_to_title:
-                        self.link_to_title[split_link[0]].append(wiki_page.find('title').text.strip())
+                        list(self.link_to_title[split_link[0]]).append(wiki_page.find('title').text.strip())
                     else:
                         self.link_to_title[split_link[0]] = [wiki_page.find('title').text.strip()]
                 else:
