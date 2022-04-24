@@ -11,7 +11,7 @@ class Indexer:
         self.corpus = set()
                
         self.id_to_title = {}
-        self.link_to_links = {}
+        self.link_to_title = {}
 
         if len(sys.argv) - 1 != 4:
             print("Fewer than four arguments!")
@@ -40,7 +40,18 @@ class Indexer:
                     self.corpus.add(stemmer.stem(text_word))
 
             for link in re.findall(link_regex, wiki_page.find('text').text.strip().strip("[]").strip()):
-                
+                split_link = str(link).split('|')
+                if len(split_link) == 1:
+                    self.corpus.add(split_link[0])
+                    if split_link[0] in self.link_to_title:
+                        self.link_to_title[split_link[0]].append(wiki_page.find('title').text.strip())
+                    else:
+                        self.link_to_title[split_link[0]] = [wiki_page.find('title').text.strip()]
+                elif len(split_link) == 2:
+                    self.corpus.add(split_link[1])
+                    self.link_to_title[split_link[0]] = [].add(wiki_page.find('title').text.strip())
+                else:
+                    break
                 
             
     def tokenize(self) -> None:
