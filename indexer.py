@@ -1,4 +1,3 @@
-from posixpath import split
 import sys
 from tokenize import String
 import xml.etree.ElementTree as et
