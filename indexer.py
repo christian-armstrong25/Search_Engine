@@ -12,6 +12,7 @@ class Indexer:
                
         self.id_to_title = {}
         self.link_to_title = {}
+        self.word_to_id_to_count = {}
 
         if len(sys.argv) - 1 != 4:
             print("Fewer than four arguments!")
@@ -54,3 +55,6 @@ class Indexer:
                         self.link_to_title[split_link[0]] = [wiki_page.find('title').text.strip()]
                 else:
                     break
+    
+    def term_frequency(self):
+        
