@@ -138,13 +138,16 @@ class Indexer:
                     self.weight_dictionary[page][link] = (
                         epsilon / total_docs)
 
-        # initialize rankings (r and r') as 0 and 1/n respectively
+        # initialize rankings (r and r')
         self.old_rankings = self.ids_to_titles  # r
         self.ids_to_pageranks = self.ids_to_titles  # r'
         for ids in self.ids_to_pageranks:
+            # initialize every rank in r to be 0
             self.old_rankings = 0
+            # initialize every rank in r' to be 1/n
             self.ids_to_pageranks[ids] = 1/total_docs
 
+        # finds the euclidian distance between two dictionaries
         def distance(old_rankings, new_rankings):
             sum_of_differences = 0
             for rank in new_rankings:
@@ -153,14 +156,19 @@ class Indexer:
 
         delta = 0.001
 
-        for page in self.ids_to_pageranks:
+        # computes PageRank using weight_dictionary and two ranking
+        # dictionaries: old_rankings (r) and ids_to_pageranks (r')
+        for pages in self.ids_to_pageranks:
+            # while distance(r, r') > delta:
             while distance(self.old_rankings, self.ids_to_pageranks) > delta:
-                self.old_rankings = self.ids_to_pageranks
-                for page in self.weight_dictionary:
-                    new_rank = 0
-                    for link in self.weight_dictionary[page]:
-                        new_rank += self.weight_dictionary[page][link] *\
+                self.old_rankings = self.ids_to_pageranks  # r <- r'
+                for pages in self.weight_dictionary:  # for j in pages
+                    new_rank = 0  # r'(j) = 0
+                    # for k in pages
+                    for link in self.weight_dictionary[pages]:
+                        # r'(j) = r'(j) + weight(k, j) * r(k)
+                        new_rank += self.weight_dictionary[pages][link] *\
                             self.old_rankings[link]
-                    self.ids_to_pageranks[page] = new_rank
+                    self.ids_to_pageranks[pages] = new_rank
 
         write_docs_file(sys.argv[3], self.ids_to_pageranks)
