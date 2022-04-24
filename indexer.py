@@ -27,7 +27,7 @@ class Indexer:
             for word in wiki_page.find('title').text.strip().lower().split():
                 self.corpus.add(word)
             
-            self.id_to_title.add(int(wiki_page.find('id').text.strip()), wiki_page.find('title').text.strip())
+            self.id_to_title[int(wiki_page.find('id').text.strip())] = wiki_page.find('title').text.strip()
 
             for word in wiki_page.find('text').text.strip().lower().split():
                 self.corpus.add(wiki_page.find('text').text.strip().lower())
@@ -43,10 +43,10 @@ class Indexer:
                 split_link = link.split('|')
                 if len(split_link) == 1:
                     self.corpus.add(split_link[0])
-                    self.link_to_links.update(split_link[0], )
+                    self.link_to_links[split_link[0]] = []
                 elif len(split_link) == 2:
                     self.corpus.add(split_link[1])
-                    self.link_to_links.add(split_link[0])
+                    self.link_to_links[split_link[0]] = []
                 else:
                     break
     def print_corpus(self):
