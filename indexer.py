@@ -1,9 +1,10 @@
+from ipaddress import summarize_address_range
 import sys
 from tokenize import String
 from turtle import title
 import xml.etree.ElementTree as et
 import re
-from file_io import write_title_file, write_words_file
+from file_io import write_docs_file, write_title_file, write_words_file
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import math
@@ -47,7 +48,8 @@ class Indexer:
             self.word_count_in_page = {}
 
             # adds the current id and title pair to the ids_to_titles dictionary
-            self.ids_to_titles[page_id] = wiki_page.find('title').text.strip()
+            self.ids_to_titles[self.page_id] = wiki_page.find(
+                'title').text.strip()
 
             # tokenized words
             words = []
@@ -119,16 +121,46 @@ class Indexer:
                     total_docs/len(self.words_to_doc_relevance[word]))
 
         epsilon = 0.15
-        self.ids_to_pageranks = self.ids_to_titles
 
+        # double dictionary of ids to ids to weights
+        self.weight_dictionary = self.ids_to_titles
+
+        # computes weights and fills weight_dictionary
         for page in self.ids_to_titles:
-            self.ids_to_pageranks[page] = {}
+            self.self.weight_dictionary[page] = {}
             for link in self.ids_to_titles:
                 if page not in self.links_from_page:  # page links to nothing
-                    self.ids_to_pageranks[page][link] = (1 / total_docs)
+                    self.weight_dictionary[page][link] = (1 / total_docs)
                 elif link in self.links_from_page[page]:  # if k links to j
-                    self.ids_to_pageranks[page][link] = (epsilon / total_docs) +\
-                        ((1 - epsilon) * (1 / len(self.links_to_id[page])))
+                    self.weight_dictionary[page][link] = (epsilon / total_docs)\
+                        + ((1 - epsilon) * (1 / len(self.links_to_id[page])))
                 else:  # otherwise
-                    self.ids_to_pageranks[page][link] = (
+                    self.weight_dictionary[page][link] = (
                         epsilon / total_docs)
+
+        # initialize rankings (r and r') as 0 and 1/n respectively
+        self.old_rankings = self.ids_to_titles  # r
+        self.ids_to_pageranks = self.ids_to_titles  # r'
+        for ids in self.ids_to_pageranks:
+            self.old_rankings = 0
+            self.ids_to_pageranks[ids] = 1/total_docs
+
+        def distance(old_rankings, new_rankings):
+            sum_of_differences = 0
+            for rank in new_rankings:
+                sum_of_differences += old_rankings[rank] - new_rankings[rank]
+            return math.sqrt(summarize_address_range * sum_of_differences)
+
+        delta = 0.001
+
+        for page in self.ids_to_pageranks:
+            while distance(self.old_rankings, self.ids_to_pageranks) > delta:
+                self.old_rankings = self.ids_to_pageranks
+                for page in self.weight_dictionary:
+                    new_rank = 0
+                    for link in self.weight_dictionary[page]:
+                        new_rank += self.weight_dictionary[page][link] *\
+                            self.old_rankings[link]
+                    self.ids_to_pageranks[page] = new_rank
+
+        write_docs_file(sys.argv[3], self.ids_to_pageranks)
