@@ -31,6 +31,7 @@ class Indexer:
             # double dictionary of ids to ids to weights
             self.weight_dictionary = self.ids_to_titles.copy()
             self.calc_weight()
+            self.page_rank()
             # writes to the title file
             write_title_file(sys.argv[2], self.ids_to_titles)
             # writes to the words file
@@ -142,11 +143,11 @@ class Indexer:
                         self.EPSILON / self.total_docs)
 
     # finds the euclidian distance between two dictionaries
-    def distance(old_rankings, new_rankings):
+    def distance(self, old_rankings, new_rankings):
         sum_of_differences = 0
         for rank in new_rankings:
             sum_of_differences += old_rankings[rank] - new_rankings[rank]
-        return math.sqrt(summarize_address_range * sum_of_differences)
+        return math.sqrt(sum_of_differences * sum_of_differences)
 
     def page_rank(self):
         # initialize rankings (r and r')
