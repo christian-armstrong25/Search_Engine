@@ -17,7 +17,7 @@ class Indexer:
         self.ids_to_titles = {}  # maps page ids to page titles
         self.links_from_page = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
-
+        # self.weight_dict = {1: {1: 0.05, 2: 0.475, 3: 0.475}, 2: {1: 0.475, 2: 0.05, 3: 0.475}, 3: {1: 0.9, 2: 0.05, 3: 0.05}}
         # double dictionary from words, to the documents they appear in, to
         # the relevance of those documents to that word according to tf and idf
         self.words_to_doc_relevance = {}
