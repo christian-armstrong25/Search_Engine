@@ -28,7 +28,8 @@ class Indexer:
         else:
             self.parse(sys.argv[1])  # parses the XML file
             self.calc_relevance()
-            self.weight_dictionary = self.ids_to_titles # double dictionary of ids to ids to weights
+            # double dictionary of ids to ids to weights
+            self.weight_dictionary = self.ids_to_titles
             self.calc_weight()
             # the total number of pages in the given XML
             self.total_docs = len(self.ids_to_titles)
@@ -36,7 +37,7 @@ class Indexer:
             write_title_file(sys.argv[2], self.ids_to_titles)
             # writes to the words file
             write_words_file(self.words_to_doc_relevance, sys.argv[4])
-            #writes to the docs file
+            # writes to the docs file
             write_docs_file(sys.argv[3], self.ids_to_pageranks)
 
     def parse(self, input_file: String) -> None:
@@ -73,9 +74,11 @@ class Indexer:
 
                 # appends the text from a link to words
                 if len(split_link) == 1:
-                    words.append(split_link[0])
+                    words.append(split_link[0].strip(
+                        ":").replace(":", "").split())
                 else:
-                    words.append(split_link[1])
+                    words.append(split_link[1].strip(
+                        ":").replace(":", "").split())
 
                 # adds link to the link_to_title dictionary
                 if page_id in self.links_to_id:
@@ -117,12 +120,12 @@ class Indexer:
                         max_word_count_on_page
 
     def calc_relevance(self):
-    # multiplies each tf value in the words_to_doc_relevance dictionary by
-    # the idf score of the word the tf value is calculated from, turning
-    # the values in the words_to_doc_relevance into relevance values
+        # multiplies each tf value in the words_to_doc_relevance dictionary by
+        # the idf score of the word the tf value is calculated from, turning
+        # the values in the words_to_doc_relevance into relevance values
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
-                self.words_to_doc_relevance[word][page] *= math.log( \
+                self.words_to_doc_relevance[word][page] *= math.log(
                     self.total_docs/len(self.words_to_doc_relevance[word]))
 
     def calc_weight(self):
@@ -134,7 +137,8 @@ class Indexer:
                     self.weight_dictionary[page][link] = (1 / self.total_docs)
                 elif link in self.links_from_page[page]:  # if k links to j
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
-                        + ((1 - self.EPSILON) * (1 / len(self.links_to_id[page])))
+                        + ((1 - self.EPSILON) *
+                           (1 / len(self.links_to_id[page])))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
                         self.EPSILON / self.total_docs)
@@ -170,5 +174,3 @@ class Indexer:
                         new_rank += self.weight_dictionary[pages][link] *\
                             self.old_rankings[link]
                     self.ids_to_pageranks[pages] = new_rank
-
-        
