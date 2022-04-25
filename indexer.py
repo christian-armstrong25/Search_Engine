@@ -31,12 +31,10 @@ class Indexer:
             # double dictionary of ids to ids to weights
             self.weight_dictionary = self.ids_to_titles
             self.calc_weight()
-            # the total number of pages in the given XML
-            self.total_docs = len(self.ids_to_titles)
             # writes to the title file
             write_title_file(sys.argv[2], self.ids_to_titles)
             # writes to the words file
-            write_words_file(self.words_to_doc_relevance, sys.argv[4])
+            write_words_file(sys.argv[4], self.words_to_doc_relevance)
             # writes to the docs file
             write_docs_file(sys.argv[3], self.ids_to_pageranks)
 
@@ -59,10 +57,10 @@ class Indexer:
                 'title').text.strip()
 
             # tokenized words
-            words = []
-            words.append(re.findall(text_regex, wiki_page.find(
+            words = set()
+            words.update(re.findall(text_regex, wiki_page.find(
                 'text').text.strip().lower()))  # appends on words from texts
-            words.append(re.findall(text_regex, wiki_page.find(
+            words.update(re.findall(text_regex, wiki_page.find(
                 'title').text.strip().lower()))  # appends on words from titles
 
             # removes brackets from links, then splits them up by the pipe
@@ -73,10 +71,10 @@ class Indexer:
 
                 # appends the text from a link to words
                 if len(split_link) == 1:
-                    words.append(split_link[0].strip(
+                    words.update(split_link[0].strip(
                         ":").replace(":", "").split())
                 else:
-                    words.append(split_link[1].strip(
+                    words.update(split_link[1].strip(
                         ":").replace(":", "").split())
 
                 # adds link to the links_from_page dictionary
@@ -122,6 +120,7 @@ class Indexer:
         # multiplies each tf value in the words_to_doc_relevance dictionary by
         # the idf score of the word the tf value is calculated from, turning
         # the values in the words_to_doc_relevance into relevance values
+        self.total_docs = len(self.ids_to_titles) # the total number of pages in the given XML
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
                 self.words_to_doc_relevance[word][page] *= math.log(
