@@ -17,7 +17,6 @@ class Indexer:
         self.ids_to_titles = {}  # maps page ids to page titles
         self.ids_links_titles = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
-        # self.weight_dict = {1: {1: 0.05, 2: 0.475, 3: 0.475}, 2: {1: 0.475, 2: 0.05, 3: 0.475}, 3: {1: 0.9, 2: 0.05, 3: 0.05}}
         # double dictionary from words, to the documents they appear in, to
         # the relevance of those documents to that word according to tf and idf
         self.words_to_doc_relevance = {}
@@ -177,10 +176,3 @@ class Indexer:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
                     self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *
                                                  self.old_rankings[k])
-
-
-if __name__ == "__main__":
-    sys.argv = ["indexer.py", "wikis/HandoutWiki.xml",
-                "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
-    indexer = Indexer()
-    indexer.page_rank
