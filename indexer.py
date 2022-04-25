@@ -135,8 +135,12 @@ class Indexer:
             self.weight_dictionary[page] = {}
             for link in self.ids_to_titles:
                 if page not in self.ids_links_titles:  # page links to nothing
-                    self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
-                        + ((1 - self.EPSILON) / (self.total_docs - 1))
+                    if page != link:
+                        self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
+                            + ((1 - self.EPSILON) / (self.total_docs - 1))
+                    else:
+                        self.weight_dictionary[page][link] = (
+                            self.EPSILON / self.total_docs)
                 elif self.ids_to_titles[link] in self.ids_links_titles[page]:  # if k links to j
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
                         + ((1 - self.EPSILON) / len(self.ids_links_titles[page]))
