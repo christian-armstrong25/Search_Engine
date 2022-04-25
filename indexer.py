@@ -80,11 +80,11 @@ class Indexer:
                     words.append(split_link[1].strip(
                         ":").replace(":", "").split())
 
-                # adds link to the link_to_title dictionary
-                if page_id in self.links_to_id:
+                # adds link to the links_from_page dictionary
+                if page_id in self.links_from_page:
                     # ignores links from a page to itself
                     if split_link[link] != wiki_page.find('title').text.strip():
-                        self.links_from_page[page_id].add(split_link[0])
+                        set(self.links_from_page[page_id]).add(split_link[0])
                 else:
                     # set only contains unique links
                     self.links_from_page[page_id] = set(split_link[0])
@@ -138,7 +138,7 @@ class Indexer:
                 elif link in self.links_from_page[page]:  # if k links to j
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
                         + ((1 - self.EPSILON) *
-                           (1 / len(self.links_to_id[page])))
+                           (1 / len(self.links_from_page[page])))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
                         self.EPSILON / self.total_docs)
