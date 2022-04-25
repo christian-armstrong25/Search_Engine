@@ -10,6 +10,7 @@ from nltk.corpus import stopwords
 import math
 STOP_WORDS = set(stopwords.words('english'))
 
+
 class Indexer:
     def __init__(self) -> None:
         self.corpus = set()  # set of all words in the given XML file
@@ -121,7 +122,8 @@ class Indexer:
         # multiplies each tf value in the words_to_doc_relevance dictionary by
         # the idf score of the word the tf value is calculated from, turning
         # the values in the words_to_doc_relevance into relevance values
-        self.total_docs = len(self.ids_to_titles) # the total number of pages in the given XML
+        # the total number of pages in the given XML
+        self.total_docs = len(self.ids_to_titles)
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
                 self.words_to_doc_relevance[word][page] *= math.log(
@@ -146,8 +148,9 @@ class Indexer:
     def distance(self, old_rankings, new_rankings):
         sum_of_differences = 0
         for rank in new_rankings:
-            sum_of_differences += old_rankings[rank] - new_rankings[rank]
-        return math.sqrt(sum_of_differences * sum_of_differences)
+            sum_of_differences += (old_rankings[rank] - new_rankings[rank]) *\
+                (old_rankings[rank] - new_rankings[rank])
+        return math.sqrt(sum_of_differences)
 
     def page_rank(self):
         # initialize rankings (r and r')
