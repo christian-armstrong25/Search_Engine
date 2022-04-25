@@ -7,7 +7,6 @@ import re
 from file_io import write_docs_file, write_title_file, write_words_file
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
-STOP_WORDS = set(stopwords.words('english'))
 import math
 
 
