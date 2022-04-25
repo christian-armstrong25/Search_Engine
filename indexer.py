@@ -148,8 +148,8 @@ class Indexer:
     def distance(self, old_rankings, new_rankings):
         sum_of_differences = 0
         for rank in new_rankings:
-            sum_of_differences += (old_rankings[rank] - new_rankings[rank]) *\
-                (old_rankings[rank] - new_rankings[rank])
+            sum_of_differences += (new_rankings[rank] - old_rankings[rank]) *\
+                (new_rankings[rank] - old_rankings[rank])
         return math.sqrt(sum_of_differences)
 
     def page_rank(self):
