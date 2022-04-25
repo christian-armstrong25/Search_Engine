@@ -55,7 +55,7 @@ class Indexer:
             self.word_count_in_page = {}
 
             # adds the current id and title pair to the ids_to_titles dictionary
-            self.ids_to_titles[self.page_id] = wiki_page.find(
+            self.ids_to_titles[page_id] = wiki_page.find(
                 'title').text.strip()
 
             # tokenized words
