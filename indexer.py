@@ -164,17 +164,13 @@ class Indexer:
             # initialize every rank in r' to be 1/n
             self.ids_to_pageranks[ids] = 1/self.total_docs
 
-        # computes PageRank using weight_dictionary and two ranking
-        # dictionaries: old_rankings (r) and ids_to_pageranks (r')
-        for pages in self.ids_to_pageranks:
-            # while distance(r, r') > delta:
-            while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
-                self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
-                for pages in self.weight_dictionary:  # for j in pages
-                    new_rank = 0  # r'(j) = 0
-                    # for k in pages
-                    for link in self.weight_dictionary[pages]:
-                        # r'(j) = r'(j) + weight(k, j) * r(k)
-                        new_rank += self.weight_dictionary[pages][link] *\
-                            self.old_rankings[link]
-                    self.ids_to_pageranks[pages] = new_rank
+        while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
+            self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
+            for pages in self.weight_dictionary:  # for j in pages
+                new_rank = 0  # r'(j) = 0
+                # for k in pages
+                for link in self.weight_dictionary[pages]:
+                    # r'(j) = r'(j) + weight(k, j) * r(k)
+                    new_rank += self.weight_dictionary[pages][link] *\
+                        self.old_rankings[link]
+                self.ids_to_pageranks[ids] = new_rank
