@@ -167,10 +167,9 @@ class Indexer:
         while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
             self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
             for pages in self.weight_dictionary:  # for j in pages
-                new_rank = 0  # r'(j) = 0
+                self.ids_to_pageranks[pages] = 0  # r'(j) = 0
                 # for k in pages
                 for link in self.weight_dictionary[pages]:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
-                    new_rank += self.weight_dictionary[pages][link] *\
+                    self.ids_to_pageranks[pages] += self.weight_dictionary[pages][link] *\
                         self.old_rankings[link]
-                self.ids_to_pageranks[ids] = new_rank
