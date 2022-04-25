@@ -29,7 +29,7 @@ class Indexer:
             self.parse(sys.argv[1])  # parses the XML file
             self.calc_relevance()
             # double dictionary of ids to ids to weights
-            self.weight_dictionary = self.ids_to_titles
+            self.weight_dictionary = self.ids_to_titles.copy()
             self.calc_weight()
             # writes to the title file
             write_title_file(sys.argv[2], self.ids_to_titles)
@@ -80,7 +80,7 @@ class Indexer:
                 # adds link to the links_from_page dictionary
                 if page_id in self.links_from_page:
                     # ignores links from a page to itself
-                    if split_link[link] != wiki_page.find('title').text.strip():
+                    if split_link[0] != wiki_page.find('title').text.strip():
                         set(self.links_from_page[page_id]).add(split_link[0])
                 else:
                     # set only contains unique links
@@ -150,8 +150,8 @@ class Indexer:
 
     def page_rank(self):
         # initialize rankings (r and r')
-        self.old_rankings = self.ids_to_titles  # r
-        self.ids_to_pageranks = self.ids_to_titles  # r'
+        self.old_rankings = self.ids_to_titles.copy()  # r
+        self.ids_to_pageranks = self.ids_to_titles.copy()  # r'
         for ids in self.ids_to_pageranks:
             # initialize every rank in r to be 0
             self.old_rankings = 0
