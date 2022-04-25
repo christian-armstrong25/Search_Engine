@@ -15,7 +15,7 @@ class Indexer:
     def __init__(self) -> None:
         self.corpus = set()  # set of all words in the given XML file
         self.ids_to_titles = {}  # maps page ids to page titles
-        self.links_from_page = {}  # maps an id to all the titles it links to
+        self.ids_links_titles = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
         # self.weight_dict = {1: {1: 0.05, 2: 0.475, 3: 0.475}, 2: {1: 0.475, 2: 0.05, 3: 0.475}, 3: {1: 0.9, 2: 0.05, 3: 0.05}}
         # double dictionary from words, to the documents they appear in, to
@@ -80,13 +80,13 @@ class Indexer:
                         ":").replace(":", "").split())
 
                 # adds link to the links_from_page dictionary
-                if page_id in self.links_from_page:
+                if page_id in self.ids_links_titles:
                     # ignores links from a page to itself
                     if split_link[0] is not wiki_page.find('title').text.strip():
-                        self.links_from_page[page_id].add(split_link[0])
+                        self.ids_links_titles[page_id].add(split_link[0])
                 else:
                     # set only contains unique links
-                    self.links_from_page[page_id] = set(split_link[0])
+                    self.ids_links_titles[page_id] = set(split_link[0])
 
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
@@ -134,12 +134,12 @@ class Indexer:
         for page in self.ids_to_titles:
             self.weight_dictionary[page] = {}
             for link in self.ids_to_titles:
-                if page not in self.links_from_page:  # page links to nothing
+                if page not in self.ids_links_titles:  # page links to nothing
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
                         + ((1 - self.EPSILON) / (self.total_docs - 1))
-                elif self.ids_to_titles[link] in self.links_from_page[page]:  # if k links to j
+                elif self.ids_to_titles[link] in self.ids_links_titles[page]:  # if k links to j
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
-                        + ((1 - self.EPSILON) / len(self.links_from_page[page]))
+                        + ((1 - self.EPSILON) / len(self.ids_links_titles[page]))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
                         self.EPSILON / self.total_docs)
