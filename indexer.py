@@ -27,6 +27,8 @@ class Indexer:
         else:
             self.parse(sys.argv[1])  # parses the XML file
 
+            # the total number of pages in the given XML
+            self.total_docs = len(self.ids_to_titles)
             # writes to the title file
             write_title_file(sys.argv[2], self.ids_to_titles)
             # writes to the words file
@@ -109,16 +111,13 @@ class Indexer:
                     self.words_to_doc_relevance[word][page_id] /= \
                         max_word_count_on_page
 
-        # the total number of pages in the given XML
-        total_docs = len(self.ids_to_titles)
-
         # multiplies each tf value in the words_to_doc_relevance dictionary by
         # the idf score of the word the tf value is calculated from, turning
         # the values in the words_to_doc_relevance into relevance values
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
                 self.words_to_doc_relevance[word][page] *= math.log(
-                    total_docs/len(self.words_to_doc_relevance[word]))
+                    self.total_docs/len(self.words_to_doc_relevance[word]))
 
         epsilon = 0.15
 
@@ -130,13 +129,13 @@ class Indexer:
             self.self.weight_dictionary[page] = {}
             for link in self.ids_to_titles:
                 if page not in self.links_from_page:  # page links to nothing
-                    self.weight_dictionary[page][link] = (1 / total_docs)
+                    self.weight_dictionary[page][link] = (1 / self.total_docs)
                 elif link in self.links_from_page[page]:  # if k links to j
-                    self.weight_dictionary[page][link] = (epsilon / total_docs)\
+                    self.weight_dictionary[page][link] = (epsilon / self.total_docs)\
                         + ((1 - epsilon) * (1 / len(self.links_to_id[page])))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
-                        epsilon / total_docs)
+                        epsilon / self.total_docs)
 
         # initialize rankings (r and r')
         self.old_rankings = self.ids_to_titles  # r
@@ -145,7 +144,7 @@ class Indexer:
             # initialize every rank in r to be 0
             self.old_rankings = 0
             # initialize every rank in r' to be 1/n
-            self.ids_to_pageranks[ids] = 1/total_docs
+            self.ids_to_pageranks[ids] = 1/self.total_docs
 
         # finds the euclidian distance between two dictionaries
         def distance(old_rankings, new_rankings):
