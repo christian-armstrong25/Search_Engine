@@ -20,19 +20,24 @@ class Indexer:
         # double dictionary from words, to the documents they appear in, to
         # the relevance of those documents to that word according to tf and idf
         self.words_to_doc_relevance = {}
-
+        self.EPSILON = 0.15
+        self.DELTA = 0.001
         # prints message if less than 4 arguments in terminal
         if len(sys.argv) - 1 != 4:
             print("Fewer than four arguments!")
         else:
             self.parse(sys.argv[1])  # parses the XML file
-
+            self.calc_relevance()
+            self.weight_dictionary = self.ids_to_titles # double dictionary of ids to ids to weights
+            self.calc_weight()
             # the total number of pages in the given XML
             self.total_docs = len(self.ids_to_titles)
             # writes to the title file
             write_title_file(sys.argv[2], self.ids_to_titles)
             # writes to the words file
             write_words_file(self.words_to_doc_relevance, sys.argv[4])
+            #writes to the docs file
+            write_docs_file(sys.argv[3], self.ids_to_pageranks)
 
     def parse(self, input_file: String) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
@@ -111,32 +116,37 @@ class Indexer:
                     self.words_to_doc_relevance[word][page_id] /= \
                         max_word_count_on_page
 
-        # multiplies each tf value in the words_to_doc_relevance dictionary by
-        # the idf score of the word the tf value is calculated from, turning
-        # the values in the words_to_doc_relevance into relevance values
+    def calc_relevance(self):
+    # multiplies each tf value in the words_to_doc_relevance dictionary by
+    # the idf score of the word the tf value is calculated from, turning
+    # the values in the words_to_doc_relevance into relevance values
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
-                self.words_to_doc_relevance[word][page] *= math.log(
+                self.words_to_doc_relevance[word][page] *= math.log( \
                     self.total_docs/len(self.words_to_doc_relevance[word]))
 
-        epsilon = 0.15
-
-        # double dictionary of ids to ids to weights
-        self.weight_dictionary = self.ids_to_titles
-
+    def calc_weight(self):
         # computes weights and fills weight_dictionary
         for page in self.ids_to_titles:
-            self.self.weight_dictionary[page] = {}
+            self.weight_dictionary[page] = {}
             for link in self.ids_to_titles:
                 if page not in self.links_from_page:  # page links to nothing
                     self.weight_dictionary[page][link] = (1 / self.total_docs)
                 elif link in self.links_from_page[page]:  # if k links to j
-                    self.weight_dictionary[page][link] = (epsilon / self.total_docs)\
-                        + ((1 - epsilon) * (1 / len(self.links_to_id[page])))
+                    self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
+                        + ((1 - self.EPSILON) * (1 / len(self.links_to_id[page])))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
-                        epsilon / self.total_docs)
+                        self.EPSILON / self.total_docs)
 
+    # finds the euclidian distance between two dictionaries
+    def distance(old_rankings, new_rankings):
+        sum_of_differences = 0
+        for rank in new_rankings:
+            sum_of_differences += old_rankings[rank] - new_rankings[rank]
+        return math.sqrt(summarize_address_range * sum_of_differences)
+
+    def page_rank(self):
         # initialize rankings (r and r')
         self.old_rankings = self.ids_to_titles  # r
         self.ids_to_pageranks = self.ids_to_titles  # r'
@@ -146,20 +156,11 @@ class Indexer:
             # initialize every rank in r' to be 1/n
             self.ids_to_pageranks[ids] = 1/self.total_docs
 
-        # finds the euclidian distance between two dictionaries
-        def distance(old_rankings, new_rankings):
-            sum_of_differences = 0
-            for rank in new_rankings:
-                sum_of_differences += old_rankings[rank] - new_rankings[rank]
-            return math.sqrt(summarize_address_range * sum_of_differences)
-
-        delta = 0.001
-
         # computes PageRank using weight_dictionary and two ranking
         # dictionaries: old_rankings (r) and ids_to_pageranks (r')
         for pages in self.ids_to_pageranks:
             # while distance(r, r') > delta:
-            while distance(self.old_rankings, self.ids_to_pageranks) > delta:
+            while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
                 self.old_rankings = self.ids_to_pageranks  # r <- r'
                 for pages in self.weight_dictionary:  # for j in pages
                     new_rank = 0  # r'(j) = 0
@@ -170,4 +171,4 @@ class Indexer:
                             self.old_rankings[link]
                     self.ids_to_pageranks[pages] = new_rank
 
-        write_docs_file(sys.argv[3], self.ids_to_pageranks)
+        
