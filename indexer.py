@@ -163,7 +163,7 @@ class Indexer:
         for pages in self.ids_to_pageranks:
             # while distance(r, r') > delta:
             while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
-                self.old_rankings = self.ids_to_pageranks  # r <- r'
+                self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
                 for pages in self.weight_dictionary:  # for j in pages
                     new_rank = 0  # r'(j) = 0
                     # for k in pages
