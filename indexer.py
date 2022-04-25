@@ -162,7 +162,7 @@ class Indexer:
             # initialize every rank in r' to be 1/n
             self.ids_to_pageranks[ids] = 1/self.total_docs
 
-        for i in range(0, 1, 1):
+        while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
             self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
             for j in self.weight_dictionary:  # for j in pages
                 self.ids_to_pageranks[j] = 0  # r'(j) = 0
@@ -171,3 +171,10 @@ class Indexer:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
                     self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *\
                            self.old_rankings[k])
+
+
+if __name__ == "__main__":
+    sys.argv = ["indexer.py", "wikis/HandoutWiki.xml",
+            "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
+    indexer = Indexer()
+    indexer.page_rank
