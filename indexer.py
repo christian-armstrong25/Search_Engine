@@ -8,7 +8,7 @@ from file_io import write_docs_file, write_title_file, write_words_file
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 import math
-
+STOP_WORDS = set(stopwords.words('english'))
 
 class Indexer:
     def __init__(self) -> None:
@@ -43,7 +43,6 @@ class Indexer:
     def parse(self, input_file: String) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
         text_regex = '''[a-zA-Z0-9]+'[a-zA-Z0-9]+|[a-zA-Z0-9]+'''
-        STOP_WORDS = set(stopwords.words('english'))
         stemmer = PorterStemmer()
         wiki_tree = et.parse(input_file)  # parses the XML file
         wiki_xml_root = wiki_tree.getroot()
