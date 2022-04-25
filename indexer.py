@@ -136,12 +136,10 @@ class Indexer:
             for link in self.ids_to_titles:
                 if page not in self.links_from_page:  # page links to nothing
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
-                        + ((1 - self.EPSILON) *
-                           (1 / (self.total_docs - 1)))
+                        + ((1 - self.EPSILON) / (self.total_docs - 1))
                 elif link in self.links_from_page[page]:  # if k links to j
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
-                        + ((1 - self.EPSILON) *
-                           (1 / len(self.links_from_page[page])))
+                        + ((1 - self.EPSILON) / len(self.links_from_page[page]))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
                         self.EPSILON / self.total_docs)
@@ -164,13 +162,12 @@ class Indexer:
             # initialize every rank in r' to be 1/n
             self.ids_to_pageranks[ids] = 1/self.total_docs
 
-        while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
+        for i in range(0, 1, 1):
             self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
-            for pages in self.weight_dictionary:  # for j in pages
-                self.ids_to_pageranks[pages] = 0  # r'(j) = 0
+            for j in self.weight_dictionary:  # for j in pages
+                self.ids_to_pageranks[j] = 0  # r'(j) = 0
                 # for k in pages
-                for link in self.weight_dictionary[pages]:
+                for k in self.weight_dictionary[j]:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
-                    self.ids_to_pageranks[pages] = self.ids_to_pageranks[pages] \
-                        + (self.weight_dictionary[pages][link] *
-                           self.old_rankings[link])
+                    self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *\
+                           self.old_rankings[k])
