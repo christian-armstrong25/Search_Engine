@@ -135,15 +135,17 @@ class Indexer:
             self.weight_dictionary[page] = {}
             for link in self.ids_to_titles:
                 if page not in self.ids_links_titles:  # page links to nothing
-                    if page != link:
+                    if page != link:  # links to everything EXCEPT itself
                         self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
                             + ((1 - self.EPSILON) / (self.total_docs - 1))
-                    else:
+                    else:  # when it links to itself
                         self.weight_dictionary[page][link] = (
                             self.EPSILON / self.total_docs)
-                elif self.ids_to_titles[link] in self.ids_links_titles[page]:  # if k links to j
+                # if k links to j
+                elif self.ids_to_titles[link] in self.ids_links_titles[page]:
                     self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
-                        + ((1 - self.EPSILON) / len(self.ids_links_titles[page]))
+                        + ((1 - self.EPSILON) /
+                           len(self.ids_links_titles[page]))
                 else:  # otherwise
                     self.weight_dictionary[page][link] = (
                         self.EPSILON / self.total_docs)
@@ -173,12 +175,12 @@ class Indexer:
                 # for k in pages
                 for k in self.weight_dictionary[j]:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
-                    self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *\
-                           self.old_rankings[k])
+                    self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *
+                                                 self.old_rankings[k])
 
 
 if __name__ == "__main__":
     sys.argv = ["indexer.py", "wikis/HandoutWiki.xml",
-            "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
+                "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
     indexer = Indexer()
     indexer.page_rank
