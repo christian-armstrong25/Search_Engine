@@ -82,8 +82,8 @@ class Indexer:
                 # adds link to the links_from_page dictionary
                 if page_id in self.links_from_page:
                     # ignores links from a page to itself
-                    if split_link[0] != wiki_page.find('title').text.strip():
-                        set(self.links_from_page[page_id]).add(split_link[0])
+                    if split_link[0] is not wiki_page.find('title').text.strip():
+                        self.links_from_page[page_id].add(split_link[0])
                 else:
                     # set only contains unique links
                     self.links_from_page[page_id] = set(split_link[0])
