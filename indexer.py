@@ -171,5 +171,6 @@ class Indexer:
                 # for k in pages
                 for link in self.weight_dictionary[pages]:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
-                    self.ids_to_pageranks[pages] += self.weight_dictionary[pages][link] *\
-                        self.old_rankings[link]
+                    self.ids_to_pageranks[pages] = self.ids_to_pageranks[pages] \
+                        + (self.weight_dictionary[pages][link] *
+                           self.old_rankings[link])
