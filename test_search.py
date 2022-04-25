@@ -8,4 +8,4 @@ sys.argv = ["indexer.py", "wikis/HandoutWiki.xml",
 #print(Indexer().ids_to_titles)
 #print(Indexer().links_from_page)
 #print(Indexer().words_to_doc_relevance)
-print(Indexer().ids_to_pageranks)
+print(Indexer().weight_dictionary)

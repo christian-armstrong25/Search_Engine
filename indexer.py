@@ -154,7 +154,7 @@ class Indexer:
         self.ids_to_pageranks = self.ids_to_titles.copy()  # r'
         for ids in self.ids_to_pageranks:
             # initialize every rank in r to be 0
-            self.old_rankings = 0
+            self.old_rankings[ids] = 0
             # initialize every rank in r' to be 1/n
             self.ids_to_pageranks[ids] = 1/self.total_docs
 
