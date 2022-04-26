@@ -6,12 +6,15 @@ STOP_WORDS = set(stopwords.words('english'))
 
 class Query:
     def __init__(self) -> None:
+        command_index = 0
+        if sys.argv[1] == "--pagerank":
+            command_index = 1
         self.ids_to_titles = {}
-        read_title_file(sys.argv[2], self.ids_to_titles)
+        read_title_file(sys.argv[2 + command_index], self.ids_to_titles)
         self.ids_to_pageranks = {}
-        read_docs_file(sys.argv[3], self.ids_to_pageranks)
+        read_docs_file(sys.argv[3 + command_index], self.ids_to_pageranks)
         self.words_to_doc_relevance = {}
-        read_words_file(sys.argv[4], self.words_to_doc_relevance)
+        read_words_file(sys.argv[4 + command_index], self.words_to_doc_relevance)
         self.query = []
         self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
         
@@ -33,7 +36,18 @@ class Query:
         if sys.argv[1] == "--pagerank":
             for docs in self.ids_to_relevance:
                 self.ids_to_relevance[docs] *= self.ids_to_pageranks[docs]
+
         self.ids_to_relevance = dict(sorted(self.ids_to_relevance.items(), key= lambda x : x[1], reverse = True))
+
+        
+        items = self.ids_to_pageranks.items
+        for i in items:
+
+            
+
+        
+
+        
     
 
             
