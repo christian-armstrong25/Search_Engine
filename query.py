@@ -18,9 +18,9 @@ class Query:
         read_words_file(sys.argv[4 + command_index],
                         self.words_to_doc_relevance)
         self.query = []
-        self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
 
         while (True):
+            self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
             self.input = input("Search: ")
             if self.input == ":quit":
                 break
