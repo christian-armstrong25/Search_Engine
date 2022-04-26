@@ -41,7 +41,7 @@ class Query:
 
     # 6. takes in two lists and returns a sorted list made up of the content within the two lists
 
-    def merge(self, left, right):
+    def merge(left, right):
         # 7. Initialize an empty list output that will be populated with sorted elements.
         # Initialize two variables i and j which are used pointers when iterating through the lists.
         output = []
@@ -74,10 +74,13 @@ class Query:
 
         # 4. To ensure all partitions are broken down into their individual components,
         # the merge_sort function is called and a partitioned portion of the list is passed as a parameter
-        left_partition = merge_sort(list[:mid_point])
-        right_partition = merge_sort(list[mid_point:])
+        left_partition = self.merge_sort(list[:mid_point])
+        right_partition = self.merge_sort(list[mid_point:])
 
         # 5. The merge_sort function returns a list composed of a sorted left and right partition.
-        return merge(left_partition, right_partition)
+        return self.merge(left_partition, right_partition)
 
-    items = merge_sort(self.ids_to_pageranks.items)
+    
+    for i in range(10):
+        print(i + ". " + merge_sort(ids_to_relevance.items())[i][0])
+        
