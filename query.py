@@ -26,7 +26,7 @@ class Query:
                 break
             else:
                 self.score_docs()
-                print(self.ids_to_relevance)
+                self.print_top_10()
 
     def score_docs(self) -> None:
         self.query = self.input.split()
@@ -80,7 +80,7 @@ class Query:
         # 5. The merge_sort function returns a list composed of a sorted left and right partition.
         return self.merge(left_partition, right_partition)
 
-    
-    for i in range(10):
-        print(i + ". " + merge_sort(ids_to_relevance.items())[i][0])
-        
+    def print_top_10(self):
+        sorted_list = self.merge_sort(self.ids_to_relevance.items())
+        for i in range(10):
+            print(i + ". " + sorted_list[i][0])
