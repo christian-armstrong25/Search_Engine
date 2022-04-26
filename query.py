@@ -13,8 +13,8 @@ class Query:
         self.words_to_doc_relevance = {}
         read_words_file(sys.argv[4], self.words_to_doc_relevance)
         self.query = []
-        self.ids_to_relevance = dict.fromkeys(self.ids_to_titles, 0)
-
+        self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
+        
         while (True):
             self.input = input("Search: ")
             if self.input == ":quit":
@@ -26,22 +26,15 @@ class Query:
     def score_docs(self) -> None:
         self.query = self.input.split()
         for word in self.query:
+            word = PorterStemmer().stem(word)
             if word not in STOP_WORDS and word in self.words_to_doc_relevance:
-                word = PorterStemmer().stem(word)
                 for id in self.words_to_doc_relevance[word]:
                     self.ids_to_relevance[id] += self.words_to_doc_relevance[word][id]
-
-
-
-
-
-
-
-            self.ids_to_relevance = sorted(self.ids_to_relevance.items(), key= lambda x : x[1], reverse = True)
-
-        # for id in range(0, len(self.ids_to_relevance), 1):
-        #     self.ids_to_relevance[id][1] = self.ids_to_titles[id]
-        
+        if sys.argv[1] == "--pagerank":
+            for docs in self.ids_to_relevance:
+                self.ids_to_relevance[docs] *= self.ids_to_pageranks[docs]
+        self.ids_to_relevance = dict(sorted(self.ids_to_relevance.items(), key= lambda x : x[1], reverse = True))
+    
 
             
             
