@@ -41,7 +41,7 @@ class Query:
 
     # 6. takes in two lists and returns a sorted list made up of the content within the two lists
 
-    def merge(left, right):
+    def merge(self, left, right):
         # 7. Initialize an empty list output that will be populated with sorted elements.
         # Initialize two variables i and j which are used pointers when iterating through the lists.
         output = []
@@ -81,6 +81,6 @@ class Query:
         return self.merge(left_partition, right_partition)
 
     def print_top_10(self):
-        sorted_list = self.merge_sort(self.ids_to_relevance.items())
+        sorted_list = self.merge_sort(list(self.ids_to_relevance.items()))
         for i in range(10):
-            print(i + ". " + sorted_list[i][0])
+            print(str(i + 1) + ". " + self.ids_to_titles[sorted_list[i][0]])
