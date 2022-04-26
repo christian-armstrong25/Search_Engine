@@ -10,10 +10,8 @@ from nltk.corpus import stopwords
 import math
 STOP_WORDS = set(stopwords.words('english'))
 
-
 class Indexer:
     def __init__(self) -> None:
-        self.corpus = set()  # set of all words in the given XML file
         self.ids_to_titles = {}  # maps page ids to page titles
         self.ids_links_titles = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
@@ -91,7 +89,6 @@ class Indexer:
             # words_to_doc_relevance and word_count_in_page dictionaries
             for word in words:
                 if word not in STOP_WORDS:  # removes stop words
-                    self.corpus.add(stemmer.stem(word))  # stems words
                     if word not in self.words_to_doc_relevance:  # adds to dicts
                         self.words_to_doc_relevance[word] = {page_id: 1}
                         self.word_count_in_page[word] = 1
