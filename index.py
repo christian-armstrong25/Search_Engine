@@ -76,7 +76,7 @@ class Index:
                     words.update(split_link[1].strip(
                         ":").replace(":", "").split())
 
-                # adds link to the links_from_page dictionary
+                # adds link to the ids_links_titles dictionary
                 if page_id in self.ids_links_titles:
                     # ignores links from a page to itself
                     if split_link[0] is not wiki_page.find('title').text.strip():
