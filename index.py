@@ -112,7 +112,8 @@ class Index:
             # to make words_to_doc_relevance a dictionary of tf values
             for word in self.words_to_doc_relevance:
                 if page_id in self.words_to_doc_relevance[word]:
-                    self.words_to_doc_relevance[word][page_id] /= \
+                    self.words_to_doc_relevance[word][page_id] = \
+                        self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
 
     def calc_relevance(self):
