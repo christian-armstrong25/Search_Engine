@@ -2,6 +2,7 @@ from ipaddress import summarize_address_range
 import sys
 from tokenize import String
 from turtle import title
+from warnings import catch_warnings
 import xml.etree.ElementTree as et
 import re
 from file_io import write_docs_file, write_title_file, write_words_file
@@ -12,7 +13,7 @@ STOP_WORDS = set(stopwords.words('english'))
 
 
 class Indexer:
-    def __init__(self) -> None:
+    def __init__(self, xml, titles, docs, words) -> None:
         self.ids_to_titles = {}  # maps page ids to page titles
         self.ids_links_titles = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
@@ -21,22 +22,18 @@ class Indexer:
         self.words_to_doc_relevance = {}
         self.EPSILON = 0.15
         self.DELTA = 0.001
-        # prints message if less than 4 arguments in terminal
-        if len(sys.argv) - 1 != 4:
-            print("Fewer than four arguments!")
-        else:
-            self.parse(sys.argv[1])  # parses the XML file
-            self.calc_relevance()
-            # double dictionary of ids to ids to weights
-            self.weight_dictionary = self.ids_to_titles.copy()
-            self.calc_weight()
-            self.page_rank()
-            # writes to the title file
-            write_title_file(sys.argv[2], self.ids_to_titles)
-            # writes to the words file
-            write_words_file(sys.argv[4], self.words_to_doc_relevance)
-            # writes to the docs file
-            write_docs_file(sys.argv[3], self.ids_to_pageranks)
+        self.parse(xml)  # parses the XML file
+        self.calc_relevance()
+        # double dictionary of ids to ids to weights
+        self.weight_dictionary = self.ids_to_titles.copy()
+        self.calc_weight()
+        self.page_rank()
+        # writes to the title file
+        write_title_file(titles, self.ids_to_titles)
+        # writes to the docs file
+        write_docs_file(docs, self.ids_to_pageranks)
+        # writes to the words file
+        write_words_file(words, self.words_to_doc_relevance)
 
     def parse(self, input_file: String) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
@@ -179,3 +176,10 @@ class Indexer:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
                     self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *
                                                  self.old_rankings[k])
+
+
+if __name__ == "__main__":
+    try:
+        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    except:  # prints a message if less than four arguments
+        print("Fewer than four arguments!")
