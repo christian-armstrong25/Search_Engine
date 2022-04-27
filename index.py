@@ -139,14 +139,9 @@ class Indexer:
                         print("reaching")
                 # if k links to j
                 elif self.ids_to_titles[j] in self.ids_links_titles[k]:
-                    if j != k:  # links to everything EXCEPT itself
-                        self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
-                            + ((1 - self.EPSILON) /
-                               len(self.ids_links_titles[j]))
-                    else:  # when it links to itself
-                        self.weight_dictionary[j][k] = (
-                            self.EPSILON / self.total_docs)
-                        print("reaching 2")
+                    self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
+                        + ((1 - self.EPSILON) /
+                            len(self.ids_links_titles[j]))
                 else:  # otherwise
                     self.weight_dictionary[j][k] = (
                         self.EPSILON / self.total_docs)
