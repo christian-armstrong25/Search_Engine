@@ -84,3 +84,4 @@ class Query:
         sorted_list = self.merge_sort(list(self.ids_to_relevance.items()))
         for i in range(10):
             print(str(i + 1) + ". " + self.ids_to_titles[sorted_list[i][0]])
+        print("")
