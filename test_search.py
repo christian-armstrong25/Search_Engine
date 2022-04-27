@@ -10,5 +10,5 @@ from query import *
 # # print(Index().weight_dictionary)
 # print(Index().ids_to_pageranks)
 
-sys.argv = ["python3", "query.py", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
+sys.argv = ["query.py", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
 # print(Query().ids_to_relevance)

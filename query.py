@@ -78,11 +78,12 @@ if __name__ == "__main__":
         command_index = 1
     query = Querier(sys.argv[1 + command_index], sys.argv[2 + command_index],
                     sys.argv[3 + command_index])
+    print("\n")
     while (True):
         query.ids_to_relevance = dict.fromkeys(query.ids_to_titles.keys(), 0)
-        input = input("Search: ")
-        if input == ":quit":
+        user_input = input("Search: ")
+        if user_input == ":quit":
             break
         else:
-            query.score_docs(input.split())
+            query.score_docs(user_input.split())
             query.print_top_10()
