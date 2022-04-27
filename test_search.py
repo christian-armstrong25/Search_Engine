@@ -2,7 +2,7 @@ from sys import argv
 from index import *
 from query import *
 
-sys.argv = ["index.py", "wikis/PageRankExample4.xml",
+sys.argv = ["index.py", "wikis/PageRankExample3.xml",
              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
 # print(Index().ids_to_titles)
 # # print(Index().links_from_page)
