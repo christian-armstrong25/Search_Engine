@@ -11,7 +11,6 @@ import math
 STOP_WORDS = set(stopwords.words('english'))
 
 
-
 class Index:
     def __init__(self) -> None:
         self.ids_to_titles = {}  # maps page ids to page titles
@@ -41,7 +40,7 @@ class Index:
 
     def parse(self, input_file: String) -> None:
         link_regex = '''\[\[[^\[]+?\]\]'''
-        text_regex = '''[a-zA-Z0-9]+'[a-zA-Z0-9]+|[a-zA-Z0-9]+'''
+        text_regex = '''[a-zA-Z]+'[a-zA-Z]+|[a-zA-Z]+'''
         wiki_tree = et.parse(input_file)  # parses the XML file
         wiki_xml_root = wiki_tree.getroot()
 
