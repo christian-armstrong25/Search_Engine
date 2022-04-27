@@ -6,21 +6,30 @@ STOP_WORDS = set(stopwords.words('english'))
 
 
 class Querier():
-    def __init__(self, titles, docs, words) -> None:
+    def __init__(self, pagerank, titles, docs, words) -> None:
         self.ids_to_titles = {}
         read_title_file(titles, self.ids_to_titles)
         self.ids_to_pageranks = {}
         read_docs_file(docs, self.ids_to_pageranks)
         self.words_to_doc_relevance = {}
         read_words_file(words, self.words_to_doc_relevance)
+        print("\n")
+        while (True):
+            self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
+            user_input = input("Search: ")
+            if user_input == ":quit":
+                break
+            else:
+                self.score_docs(user_input.split(), pagerank)
+                self.print_top_10()
 
-    def score_docs(self, search) -> None:
+    def score_docs(self, search, pagerank) -> None:
         for word in search:
             word = PorterStemmer().stem(word)
             if word not in STOP_WORDS and word in self.words_to_doc_relevance:
                 for id in self.words_to_doc_relevance[word]:
                     self.ids_to_relevance[id] += self.words_to_doc_relevance[word][id]
-        if sys.argv[1] == "--pagerank":
+        if pagerank == True:
             for docs in self.ids_to_relevance:
                 self.ids_to_relevance[docs] *= self.ids_to_pageranks[docs]
 
@@ -74,16 +83,8 @@ class Querier():
 
 if __name__ == "__main__":
     command_index = 0
+    page_rank = False
     if sys.argv[1] == "--pagerank":
         command_index = 1
-    query = Querier(sys.argv[1 + command_index], sys.argv[2 + command_index],
-                    sys.argv[3 + command_index])
-    print("\n")
-    while (True):
-        query.ids_to_relevance = dict.fromkeys(query.ids_to_titles.keys(), 0)
-        user_input = input("Search: ")
-        if user_input == ":quit":
-            break
-        else:
-            query.score_docs(user_input.split())
-            query.print_top_10()
+        page_rank = True
+    Querier(page_rank, sys.argv[1 + command_index], sys.argv[2 + command_index],sys.argv[3 + command_index])

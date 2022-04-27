@@ -130,7 +130,7 @@ class Indexer:
         for j in self.ids_to_titles:
             self.weight_dictionary[j] = {}
             for k in self.ids_to_titles:
-                if j not in self.ids_links_titles:  # page links to nothing
+                if j not in self.ids_links_titles or len(self.ids_links_titles[j]) == 0:  # page links to nothing
                     if j != k:  # links to everything EXCEPT itself
                         self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
                             + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
@@ -177,9 +177,6 @@ class Indexer:
 
 if __name__ == "__main__":
     try:
-        #Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-        Indexer("wikis/HandoutWiki.xml",
-             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
-        # print(math.sqrt(((0.475 - 0.3333) * (0.475 - 0.3333)) + ((0.1916 - 0.3333) * (0.1916 - 0.3333))))
+        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
