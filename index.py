@@ -23,6 +23,7 @@ class Indexer:
         self.EPSILON = 0.15
         self.DELTA = 0.001
         self.parse(xml)  # parses the XML file
+        self.TOTAL_DOCS = len(self.ids_to_titles)
         self.calc_relevance()
         # double dictionary of ids to ids to weights
         self.weight_dictionary = self.ids_to_titles.copy()
@@ -73,6 +74,7 @@ class Indexer:
                     words.update(split_link[1].strip(
                         ":").replace(":", "").split())
 
+                self.ids_links_titles[page_id] = set()
                 # adds link to the ids_links_titles dictionary
                 if page_id in self.ids_links_titles:
                     # ignores links from a page to itself
@@ -118,11 +120,10 @@ class Indexer:
         # the idf score of the word the tf value is calculated from, turning
         # the values in the words_to_doc_relevance into relevance values
         # the total number of pages in the given XML
-        self.total_docs = len(self.ids_to_titles)
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
                 self.words_to_doc_relevance[word][page] *= math.log(
-                    self.total_docs/len(self.words_to_doc_relevance[word]))
+                    self.TOTAL_DOCS/len(self.words_to_doc_relevance[word]))
 
     def calc_weight(self):
         # computes weights and fills weight_dictionary
@@ -131,20 +132,19 @@ class Indexer:
             for k in self.ids_to_titles:
                 if j not in self.ids_links_titles:  # page links to nothing
                     if j != k:  # links to everything EXCEPT itself
-                        self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
-                            + ((1 - self.EPSILON) / (self.total_docs - 1))
+                        self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
+                            + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
                     else:  # when it links to itself
                         self.weight_dictionary[j][k] = (
-                            self.EPSILON / self.total_docs)
-                        print("reaching")
+                            self.EPSILON / self.TOTAL_DOCS)
                 # if k links to j
                 elif self.ids_to_titles[k] in self.ids_links_titles[j]:
-                    self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
+                    self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
                         + ((1 - self.EPSILON) /
                             len(self.ids_links_titles[j]))
                 else:  # otherwise
                     self.weight_dictionary[j][k] = (
-                        self.EPSILON / self.total_docs)
+                        self.EPSILON / self.TOTAL_DOCS)
 
     # finds the euclidian distance between two dictionaries
     def distance(self, old_rankings, new_rankings):
@@ -162,7 +162,7 @@ class Indexer:
             # initialize every rank in r to be 0
             self.old_rankings[ids] = 0
             # initialize every rank in r' to be 1/n
-            self.ids_to_pageranks[ids] = 1/self.total_docs
+            self.ids_to_pageranks[ids] = 1/self.TOTAL_DOCS
 
         while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
             self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
@@ -177,6 +177,9 @@ class Indexer:
 
 if __name__ == "__main__":
     try:
-        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        #Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        Indexer("wikis/HandoutWiki.xml",
+             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
+        # print(math.sqrt(((0.475 - 0.3333) * (0.475 - 0.3333)) + ((0.1916 - 0.3333) * (0.1916 - 0.3333))))
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
