@@ -11,7 +11,8 @@ import math
 STOP_WORDS = set(stopwords.words('english'))
 
 
-class Indexer:
+
+class Index:
     def __init__(self) -> None:
         self.ids_to_titles = {}  # maps page ids to page titles
         self.ids_links_titles = {}  # maps an id to all the titles it links to
