@@ -5,32 +5,17 @@ from nltk.corpus import stopwords
 STOP_WORDS = set(stopwords.words('english'))
 
 
-class Query:
-    def __init__(self) -> None:
-        command_index = 0
-        if sys.argv[1] == "--pagerank":
-            command_index = 1
+class Querier():
+    def __init__(self, titles, docs, words) -> None:
         self.ids_to_titles = {}
-        read_title_file(sys.argv[2 + command_index], self.ids_to_titles)
+        read_title_file(titles, self.ids_to_titles)
         self.ids_to_pageranks = {}
-        read_docs_file(sys.argv[3 + command_index], self.ids_to_pageranks)
+        read_docs_file(docs, self.ids_to_pageranks)
         self.words_to_doc_relevance = {}
-        read_words_file(sys.argv[4 + command_index],
-                        self.words_to_doc_relevance)
-        self.query = []
+        read_words_file(words, self.words_to_doc_relevance)
 
-        while (True):
-            self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
-            self.input = input("Search: ")
-            if self.input == ":quit":
-                break
-            else:
-                self.score_docs()
-                self.print_top_10()
-
-    def score_docs(self) -> None:
-        self.query = self.input.split()
-        for word in self.query:
+    def score_docs(self, search) -> None:
+        for word in search:
             word = PorterStemmer().stem(word)
             if word not in STOP_WORDS and word in self.words_to_doc_relevance:
                 for id in self.words_to_doc_relevance[word]:
@@ -82,6 +67,22 @@ class Query:
 
     def print_top_10(self):
         sorted_list = self.merge_sort(list(self.ids_to_relevance.items()))
-        for i in range(10):
+        for i in range(min(10, len(sorted_list))):
             print(str(i + 1) + ". " + self.ids_to_titles[sorted_list[i][0]])
         print("")
+
+
+if __name__ == "__main__":
+    command_index = 0
+    if sys.argv[1] == "--pagerank":
+        command_index = 1
+    query = Querier(sys.argv[1 + command_index], sys.argv[2 + command_index],
+                    sys.argv[3 + command_index])
+    while (True):
+        query.ids_to_relevance = dict.fromkeys(query.ids_to_titles.keys(), 0)
+        input = input("Search: ")
+        if input == ":quit":
+            break
+        else:
+            query.score_docs(input.split())
+            query.print_top_10()
