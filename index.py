@@ -141,11 +141,11 @@ class Index:
                             self.EPSILON / self.total_docs)
                 # if k links to j
                 elif self.ids_to_titles[link] in self.ids_links_titles[page]:
-                    if page != link:
+                    if page != link:  # links to everything EXCEPT itself
                         self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
                             + ((1 - self.EPSILON) /
-                            len(self.ids_links_titles[page]))
-                    else:
+                               len(self.ids_links_titles[page]))
+                    else:  # when it links to itself
                         self.weight_dictionary[page][link] = (
                             self.EPSILON / self.total_docs)
                 else:  # otherwise
