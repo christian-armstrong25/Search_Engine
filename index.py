@@ -126,27 +126,29 @@ class Indexer:
 
     def calc_weight(self):
         # computes weights and fills weight_dictionary
-        for page in self.ids_to_titles:
-            self.weight_dictionary[page] = {}
-            for link in self.ids_to_titles:
-                if page not in self.ids_links_titles:  # page links to nothing
-                    if page != link:  # links to everything EXCEPT itself
-                        self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
+        for j in self.ids_to_titles:
+            self.weight_dictionary[j] = {}
+            for k in self.ids_to_titles:
+                if j not in self.ids_links_titles:  # page links to nothing
+                    if j != k:  # links to everything EXCEPT itself
+                        self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
                             + ((1 - self.EPSILON) / (self.total_docs - 1))
                     else:  # when it links to itself
-                        self.weight_dictionary[page][link] = (
+                        self.weight_dictionary[j][k] = (
                             self.EPSILON / self.total_docs)
+                        print("reaching")
                 # if k links to j
-                elif self.ids_to_titles[link] in self.ids_links_titles[page]:
-                    if page != link:  # links to everything EXCEPT itself
-                        self.weight_dictionary[page][link] = (self.EPSILON / self.total_docs)\
+                elif self.ids_to_titles[j] in self.ids_links_titles[k]:
+                    if j != k:  # links to everything EXCEPT itself
+                        self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
                             + ((1 - self.EPSILON) /
-                               len(self.ids_links_titles[page]))
+                               len(self.ids_links_titles[j]))
                     else:  # when it links to itself
-                        self.weight_dictionary[page][link] = (
+                        self.weight_dictionary[j][k] = (
                             self.EPSILON / self.total_docs)
+                        print("reaching 2")
                 else:  # otherwise
-                    self.weight_dictionary[page][link] = (
+                    self.weight_dictionary[j][k] = (
                         self.EPSILON / self.total_docs)
 
     # finds the euclidian distance between two dictionaries
