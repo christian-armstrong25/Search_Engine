@@ -138,7 +138,7 @@ class Indexer:
                             self.EPSILON / self.total_docs)
                         print("reaching")
                 # if k links to j
-                elif self.ids_to_titles[j] in self.ids_links_titles[k]:
+                elif self.ids_to_titles[k] in self.ids_links_titles[j]:
                     self.weight_dictionary[j][k] = (self.EPSILON / self.total_docs)\
                         + ((1 - self.EPSILON) /
                             len(self.ids_links_titles[j]))
