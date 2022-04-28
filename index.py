@@ -130,7 +130,8 @@ class Indexer:
         for j in self.ids_to_titles:
             self.weight_dictionary[j] = {}
             for k in self.ids_to_titles:
-                if j not in self.ids_links_titles or len(self.ids_links_titles[j]) == 0:  # page links to nothing
+                # page links to nothing
+                if j not in self.ids_links_titles or len(self.ids_links_titles[j]) == 0:
                     if j != k:  # links to everything EXCEPT itself
                         self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
                             + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
