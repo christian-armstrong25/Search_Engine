@@ -49,16 +49,18 @@ class Indexer:
             # dictionary from word to count on current page
             self.word_count_in_page = {}
 
+            # list of all words in current page
+            words = []
+            
             # adds the current id and title pair to the ids_to_titles dictionary
             self.ids_to_titles[page_id] = wiki_page.find(
                 'title').text.strip()
 
             # tokenized words
-            words = set()
-            words.update(re.findall(text_regex, wiki_page.find(
+            words.extend(re.findall(text_regex, wiki_page.find(
                 'text').text.strip().lower()))  # appends on words from texts
-            words.update(re.findall(text_regex, wiki_page.find(
-                'title').text.strip().lower()))  # appends on words from titles
+            # words.extend(re.findall(text_regex, wiki_page.find(
+            #     'title').text.strip().lower()))  # appends on words from titles
 
             self.ids_links_titles[page_id] = set()
             # removes brackets from links, then splits them up by the pipe
@@ -69,10 +71,10 @@ class Indexer:
 
                 # appends the text from a link to words
                 if len(split_link) == 1:
-                    words.update(split_link[0].strip(
+                    words.extend(split_link[0].strip(
                         ":").replace(":", "").split())
                 else:
-                    words.update(split_link[1].strip(
+                    words.extend(split_link[1].strip(
                         ":").replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
@@ -83,8 +85,8 @@ class Indexer:
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
             for word in words:
-                if word not in STOP_WORDS:  # removes stop words
-                    PorterStemmer().stem(word)
+                # if word not in STOP_WORDS:  # removes stop words
+                #     PorterStemmer().stem(word)
                     if word not in self.words_to_doc_relevance:  # adds to dicts
                         self.words_to_doc_relevance[word] = {page_id: 1}
                         self.word_count_in_page[word] = 1
@@ -95,7 +97,6 @@ class Indexer:
                         else:
                             self.words_to_doc_relevance[word][page_id] += 1
                             self.word_count_in_page[word] += 1
-                            print("reaching")
 
             # the maximum count of all the words in the page
             max_word_count_on_page = max(self.word_count_in_page.values())
@@ -173,6 +174,6 @@ class Indexer:
 if __name__ == "__main__":
     try:
         #Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-        Indexer("wikis/HandoutWiki.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
+        Indexer("wikis/test_tf_idf.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
