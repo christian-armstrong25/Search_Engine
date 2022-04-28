@@ -60,6 +60,7 @@ class Indexer:
             words.update(re.findall(text_regex, wiki_page.find(
                 'title').text.strip().lower()))  # appends on words from titles
 
+            self.ids_links_titles[page_id] = set()
             # removes brackets from links, then splits them up by the pipe
             # character: '|', either a list with two items
             # (left and right of the pipe), or one item (no pipe)
@@ -74,15 +75,10 @@ class Indexer:
                     words.update(split_link[1].strip(
                         ":").replace(":", "").split())
 
-                self.ids_links_titles[page_id] = set()
                 # adds link to the ids_links_titles dictionary
-                if page_id in self.ids_links_titles:
-                    # ignores links from a page to itself
-                    if split_link[0] is not wiki_page.find('title').text.strip():
-                        self.ids_links_titles[page_id].add(split_link[0])
-                else:
-                    # set only contains unique links
-                    self.ids_links_titles[page_id] = set(split_link[0])
+                # ignores links from a page to itself
+                if split_link[0] is not wiki_page.find('title').text.strip():
+                    self.ids_links_titles[page_id].add(split_link[0])
 
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
@@ -93,18 +89,16 @@ class Indexer:
                         self.words_to_doc_relevance[word] = {page_id: 1}
                         self.word_count_in_page[word] = 1
                     else:  # also populates dictionaries
-                        if int(wiki_page.find('id').text.strip()) \
-                                not in self.words_to_doc_relevance[word]:
+                        if page_id not in self.words_to_doc_relevance[word]:
                             self.words_to_doc_relevance[word][page_id] = 1
                             self.word_count_in_page[word] = 1
                         else:
                             self.words_to_doc_relevance[word][page_id] += 1
                             self.word_count_in_page[word] += 1
+                            print("reaching")
 
-            # an integer list of the count of each word in the page
-            word_counts = self.word_count_in_page.values()
             # the maximum count of all the words in the page
-            max_word_count_on_page = max(word_counts)
+            max_word_count_on_page = max(self.word_count_in_page.values())
 
             # divides each word count on the current page in the
             # words_to_doc_relevance dictionary by the maximum word count
@@ -122,15 +116,16 @@ class Indexer:
         # the total number of pages in the given XML
         for word in self.words_to_doc_relevance:
             for page in self.words_to_doc_relevance[word]:
-                self.words_to_doc_relevance[word][page] *= math.log(
+                self.words_to_doc_relevance[word][page] = self.words_to_doc_relevance[word][page] * math.log(
                     self.TOTAL_DOCS/len(self.words_to_doc_relevance[word]))
 
     def calc_weight(self):
         # computes weights and fills weight_dictionary
         for j in self.ids_to_titles:
             self.weight_dictionary[j] = {}
-            for k in self.ids_to_titles:
-                if j not in self.ids_links_titles or len(self.ids_links_titles[j]) == 0:  # page links to nothing
+            for k in self.ids_to_titles:     
+                # if page links to nothing or links to itself
+                if j not in self.ids_links_titles or len(self.ids_links_titles[j]) == 0:
                     if j != k:  # links to everything EXCEPT itself
                         self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
                             + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
@@ -177,6 +172,7 @@ class Indexer:
 
 if __name__ == "__main__":
     try:
-        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        #Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        Indexer("wikis/HandoutWiki.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
