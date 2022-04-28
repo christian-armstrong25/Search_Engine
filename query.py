@@ -29,7 +29,7 @@ class Querier():
             if word not in STOP_WORDS and word in self.words_to_doc_relevance:
                 for id in self.words_to_doc_relevance[word]:
                     self.ids_to_relevance[id] += self.words_to_doc_relevance[word][id]
-        if pagerank == True:
+        if pagerank == "--pagerank":
             for docs in self.ids_to_relevance:
                 self.ids_to_relevance[docs] *= self.ids_to_pageranks[docs]
 
@@ -46,8 +46,8 @@ class Querier():
 
 if __name__ == "__main__":
     command_index = 0
-    page_rank = False
+    page_rank = ""
     if sys.argv[1] == "--pagerank":
         command_index = 1
-        page_rank = True
+        page_rank = "--pagerank"
     Querier(page_rank, sys.argv[1 + command_index], sys.argv[2 + command_index],sys.argv[3 + command_index])

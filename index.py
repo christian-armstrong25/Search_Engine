@@ -1,7 +1,6 @@
 from ipaddress import summarize_address_range
 import sys
 from tokenize import String
-from turtle import title
 from warnings import catch_warnings
 import xml.etree.ElementTree as et
 import re
@@ -29,6 +28,8 @@ class Indexer:
         self.weight_dictionary = self.ids_to_titles.copy()
         self.calc_weight()
         self.page_rank()
+
+        print(self.ids_to_pageranks)
         # writes to the title file
         write_title_file(titles, self.ids_to_titles)
         # writes to the docs file
@@ -51,7 +52,7 @@ class Indexer:
 
             # list of all words in current page
             words = []
-            
+
             # adds the current id and title pair to the ids_to_titles dictionary
             self.ids_to_titles[page_id] = wiki_page.find(
                 'title').text.strip()
@@ -173,7 +174,6 @@ class Indexer:
 
 if __name__ == "__main__":
     try:
-        #Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-        Indexer("wikis/test_tf_idf.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
+        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
