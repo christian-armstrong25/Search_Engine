@@ -121,7 +121,7 @@ class Indexer:
                 self.words_to_doc_relevance[word][page] = self.words_to_doc_relevance[word][page] * math.log(
                     self.TOTAL_DOCS/len(self.words_to_doc_relevance[word]))
 
-    def calculate_weights(self):
+    def calc_weights(self):
         for k in self.ids_to_titles:
             for j in self.ids_to_titles:
                 if len(self.ids_links_titles[k]) == 0:
