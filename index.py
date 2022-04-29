@@ -127,13 +127,13 @@ class Indexer:
                 if len(self.ids_links_titles[k]) == 0:
                     self.weight_dictionary[k][j] = (self.EPSILON / self.TOTAL_DOCS)\
                         + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
-                elif k == j:
-                    self.weight_dictionary[k][j] = (
-                        self.EPSILON / self.TOTAL_DOCS)
-                else:
+                elif self.ids_to_titles[j] in self.ids_links_titles[k] and k != j:
                     self.weight_dictionary[k][j] = (self.EPSILON / self.TOTAL_DOCS)\
                         + ((1 - self.EPSILON) /
                             len(self.ids_links_titles[k]))
+                else:
+                    self.weight_dictionary[k][j] = (
+                        self.EPSILON / self.TOTAL_DOCS)
 
     # finds the euclidian distance between two dictionaries
     def distance(self, old_rankings, new_rankings):
