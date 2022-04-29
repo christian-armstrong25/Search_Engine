@@ -148,13 +148,14 @@ class Indexer:
 
     def page_rank(self):
         # initialize rankings (r and r')
-        self.old_rankings = self.ids_to_titles.copy()  # r
-        self.ids_to_pageranks = self.ids_to_titles.copy()  # r'
-        for ids in self.ids_to_pageranks:
-            # initialize every rank in r to be 0
-            self.old_rankings[ids] = 0
-            # initialize every rank in r' to be 1/n
-            self.ids_to_pageranks[ids] = 1/self.TOTAL_DOCS
+        # self.old_rankings = self.ids_to_titles.copy()
+        self.old_rankings = {id : 0 for id in self.ids_to_titles}  # r
+        self.ids_to_pageranks = {id : 1/self.TOTAL_DOCS for id in self.ids_to_titles}  # r'
+        # for ids in self.ids_to_pageranks:
+        #     # initialize every rank in r to be 0
+        #     self.old_rankings[ids] = 0
+        #     # initialize every rank in r' to be 1/n
+        #     self.ids_to_pageranks[ids] = 1/self.TOTAL_DOCS
 
         while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
             self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
