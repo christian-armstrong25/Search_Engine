@@ -71,11 +71,11 @@ class Indexer:
 
                 # appends the text from a link to words
                 if len(split_link) == 1:
-                    words.extend(split_link[0].lower().strip(
-                        ":").replace(":", "").split())
+                    words.extend(
+                        split_link[0].lower().replace(":", "").split())
                 else:
-                    words.extend(split_link[1].lower().strip(
-                        ":").replace(":", "").split())
+                    words.extend(
+                        split_link[1].lower().replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
                 # ignores links from a page to itself
