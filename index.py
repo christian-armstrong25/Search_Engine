@@ -171,7 +171,5 @@ class Indexer:
 if __name__ == "__main__":
     try:
         Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-        # Indexer("wikis/SmallWiki.xml",
-        #         "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
