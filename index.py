@@ -125,16 +125,15 @@ class Indexer:
 
     def calc_weight(self):
         nothing_weight = (self.EPSILON / self.TOTAL_DOCS)\
-                        + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
+            + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
         otherwise_weight = (self.EPSILON / self.TOTAL_DOCS)
         for k in self.ids_to_titles:
-            something_weight = (self.EPSILON / self.TOTAL_DOCS)\
-                        + ((1 - self.EPSILON) / len(self.ids_links_titles[k]))
             for j in self.ids_to_titles:
                 if len(self.ids_links_titles[k]) == 0 and k != j:
                     self.weight_dictionary[k][j] = nothing_weight
                 elif self.ids_to_titles[j] in self.ids_links_titles[k] and k != j:
-                    self.weight_dictionary[k][j] = something_weight
+                    self.weight_dictionary[k][j] = (self.EPSILON / self.TOTAL_DOCS)\
+                        + ((1 - self.EPSILON) / len(self.ids_links_titles[k]))
                 else:
                     self.weight_dictionary[k][j] = otherwise_weight
 
@@ -171,6 +170,6 @@ if __name__ == "__main__":
     try:
         # Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
         Indexer("wikis/PageRankExample1.xml",
-             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
+                "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
     except:  # prints a message if less than four arguments
         print("Fewer than four arguments!")
