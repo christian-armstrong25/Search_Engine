@@ -86,8 +86,8 @@ class Indexer:
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
             for word in words:
-                # if word not in STOP_WORDS:  # removes stop words
-                #     PorterStemmer().stem(word)
+                if word not in STOP_WORDS:  # removes stop words
+                    PorterStemmer().stem(word)
                     if word not in self.words_to_doc_relevance:  # adds to dicts
                         self.words_to_doc_relevance[word] = {page_id: 1}
                         self.word_count_in_page[word] = 1
