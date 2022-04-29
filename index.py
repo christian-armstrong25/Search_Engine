@@ -124,7 +124,7 @@ class Indexer:
     def calc_weight(self):
         for k in self.ids_to_titles:
             for j in self.ids_to_titles:
-                if len(self.ids_links_titles[k]) == 0:
+                if len(self.ids_links_titles[k]) == 0 and k != j:
                     self.weight_dictionary[k][j] = (self.EPSILON / self.TOTAL_DOCS)\
                         + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
                 elif self.ids_to_titles[j] in self.ids_links_titles[k] and k != j:
