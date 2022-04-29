@@ -25,7 +25,7 @@ class Indexer:
         self.TOTAL_DOCS = len(self.ids_to_titles)
         self.calc_relevance()
         # double dictionary of ids to ids to weights
-        self.weight_dictionary = self.ids_to_titles.copy()
+        self.weight_dictionary = dict.fromkeys(self.ids_to_titles.keys(), {})
         self.calc_weight()
         self.page_rank()
 
