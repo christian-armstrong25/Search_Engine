@@ -29,7 +29,6 @@ class Indexer:
         self.calc_weight()
         self.page_rank()
 
-        print(self.ids_to_pageranks)
         # writes to the title file
         write_title_file(titles, self.ids_to_titles)
         # writes to the docs file
@@ -100,7 +99,10 @@ class Indexer:
                             self.word_count_in_page[word] += 1
 
             # the maximum count of all the words in the page
-            max_word_count_on_page = max(self.word_count_in_page.values())
+            if len(self.word_count_in_page.values()) == 0:
+                max_word_count_on_page = 0
+            else:
+                max_word_count_on_page = max(self.word_count_in_page.values())
 
             # divides each word count on the current page in the
             # words_to_doc_relevance dictionary by the maximum word count

@@ -10,10 +10,10 @@ from query import *
 #               "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_links_titles)
 # print(Indexer("wikis/MedWiki.xml",
 #             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").words_to_doc_relevance)
-print(Indexer("wikis/MedWiki.xml",
-             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").weight_dictionary)
 # print(Indexer("wikis/MedWiki.xml",
-#              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_to_pageranks)
+#              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").weight_dictionary)
+print(Indexer("wikis/PageRankExample1.xml",
+             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_to_pageranks)
 
 # sys.argv = ["query.py", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
 # Querier("", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
