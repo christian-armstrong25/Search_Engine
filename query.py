@@ -15,7 +15,7 @@ class Querier():
         read_words_file(words, self.words_to_doc_relevance)
         print("\n")
         while (True):
-            self.ids_to_relevance = dict.fromkeys(self.ids_to_titles.keys(), 0)
+            self.ids_to_relevance = {}
             user_input = input("Search: ")
             if user_input == ":quit":
                 break
@@ -28,7 +28,10 @@ class Querier():
             word = PorterStemmer().stem(word)
             if word not in STOP_WORDS and word in self.words_to_doc_relevance:
                 for id in self.words_to_doc_relevance[word]:
-                    self.ids_to_relevance[id] += self.words_to_doc_relevance[word][id]
+                    if id in self.ids_to_relevance:
+                        self.ids_to_relevance[id] += self.words_to_doc_relevance[word][id]
+                    else:
+                        self.ids_to_relevance[id] = 0
         if pagerank == "--pagerank":
             for docs in self.ids_to_relevance:
                 self.ids_to_relevance[docs] *= self.ids_to_pageranks[docs]

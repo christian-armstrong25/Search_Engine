@@ -25,7 +25,7 @@ class Indexer:
         self.TOTAL_DOCS = len(self.ids_to_titles)
         self.calc_relevance()
         # double dictionary of ids to ids to weights
-        self.weight_dictionary = dict.fromkeys(self.ids_to_titles.keys(), {})
+        self.weight_dictionary = {}
         self.calc_weight()
         self.page_rank()
 
@@ -72,10 +72,10 @@ class Indexer:
                 # appends the text from a link to words
                 if len(split_link) == 1:
                     words.extend(
-                        split_link[0].lower().replace(":", "").split())
+                        split_link[0].replace(":", "").split())
                 else:
                     words.extend(
-                        split_link[1].lower().replace(":", "").split())
+                        split_link[1].replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
                 # ignores links from a page to itself
@@ -128,6 +128,7 @@ class Indexer:
             + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
         otherwise_weight = (self.EPSILON / self.TOTAL_DOCS)
         for k in self.ids_to_titles:
+            self.weight_dictionary[k] = {}
             for j in self.ids_to_titles:
                 if len(self.ids_links_titles[k]) == 0 and k != j:
                     self.weight_dictionary[k][j] = nothing_weight
