@@ -59,8 +59,8 @@ class Indexer:
             # tokenized words
             words.extend(re.findall(text_regex, wiki_page.find(
                 'text').text.strip().lower()))  # appends on words from texts
-            # words.extend(re.findall(text_regex, wiki_page.find(
-            #     'title').text.strip().lower()))  # appends on words from titles
+            words.extend(re.findall(text_regex, wiki_page.find(
+                'title').text.strip().lower()))  # appends on words from titles
 
             self.ids_links_titles[page_id] = set()
             # removes brackets from links, then splits them up by the pipe
@@ -71,10 +71,10 @@ class Indexer:
 
                 # appends the text from a link to words
                 if len(split_link) == 1:
-                    words.extend(split_link[0].strip(
+                    words.extend(split_link[0].lower().strip(
                         ":").replace(":", "").split())
                 else:
-                    words.extend(split_link[1].strip(
+                    words.extend(split_link[1].lower().strip(
                         ":").replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
