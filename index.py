@@ -121,27 +121,19 @@ class Indexer:
                 self.words_to_doc_relevance[word][page] = self.words_to_doc_relevance[word][page] * math.log(
                     self.TOTAL_DOCS/len(self.words_to_doc_relevance[word]))
 
-    def calc_weight(self):
-        # computes weights and fills weight_dictionary
-        for j in self.ids_to_titles:
-            self.weight_dictionary[j] = {}
-            for k in self.ids_to_titles:     
-                # if page links to nothing or links to itself
-                if j not in self.ids_links_titles or len(self.ids_links_titles[j]) == 0:
-                    if j != k:  # links to everything EXCEPT itself
-                        self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
-                            + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
-                    else:  # when it links to itself
-                        self.weight_dictionary[j][k] = (
-                            self.EPSILON / self.TOTAL_DOCS)
-                # if k links to j
-                elif self.ids_to_titles[k] in self.ids_links_titles[j]:
-                    self.weight_dictionary[j][k] = (self.EPSILON / self.TOTAL_DOCS)\
-                        + ((1 - self.EPSILON) /
-                            len(self.ids_links_titles[j]))
-                else:  # otherwise
-                    self.weight_dictionary[j][k] = (
+    def calculate_weights(self):
+        for k in self.ids_to_titles:
+            for j in self.ids_to_titles:
+                if len(self.ids_links_titles[k]) == 0:
+                    self.weight_dictionary[k][j] = (self.EPSILON / self.TOTAL_DOCS)\
+                        + ((1 - self.EPSILON) / (self.TOTAL_DOCS - 1))
+                elif k == j:
+                    self.weight_dictionary[k][j] = (
                         self.EPSILON / self.TOTAL_DOCS)
+                else:
+                    self.weight_dictionary[k][j] = (self.EPSILON / self.TOTAL_DOCS)\
+                        + ((1 - self.EPSILON) /
+                            len(self.ids_links_titles[k]))
 
     # finds the euclidian distance between two dictionaries
     def distance(self, old_rankings, new_rankings):
