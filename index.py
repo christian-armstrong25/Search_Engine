@@ -63,6 +63,7 @@ class Indexer:
                 'title').text.strip().lower()))  # appends on words from titles
 
             self.ids_links_titles[page_id] = set()
+            self.remove_link_words = []
             # removes brackets from links, then splits them up by the pipe
             # character: '|', either a list with two items
             # (left and right of the pipe), or one item (no pipe)
@@ -70,11 +71,8 @@ class Indexer:
                 split_link = str(link).strip().strip("[[]]").strip().split('|')
 
                 # appends the text from a link to words
-                if len(split_link) == 1:
-                    words.extend(
-                        split_link[0].replace(":", "").split())
-                else:
-                    words.extend(
+                if len(split_link) == 2:
+                    self.remove_link_words.extend(
                         split_link[1].replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
@@ -87,7 +85,9 @@ class Indexer:
             for word in words:
                 if word not in STOP_WORDS:  # removes stop words
                     PorterStemmer().stem(word)
-                    if word not in self.words_to_doc_relevance:  # adds to dicts
+                    if word in self.remove_link_words:
+                        self.remove_link_words.remove(word)
+                    elif word not in self.words_to_doc_relevance:  # adds to dicts
                         self.words_to_doc_relevance[word] = {page_id: 1}
                         self.word_count_in_page[word] = 1
                     else:  # also populates dictionaries
@@ -154,8 +154,9 @@ class Indexer:
     def page_rank(self):
         # initialize rankings (r and r')
         # self.old_rankings = self.ids_to_titles.copy()
-        self.old_rankings = {id : 0 for id in self.ids_to_titles}  # r
-        self.ids_to_pageranks = {id : 1/self.TOTAL_DOCS for id in self.ids_to_titles}  # r'
+        self.old_rankings = {id: 0 for id in self.ids_to_titles}  # r
+        self.ids_to_pageranks = {
+            id: 1/self.TOTAL_DOCS for id in self.ids_to_titles}  # r'
         # for ids in self.ids_to_pageranks:
         #     # initialize every rank in r to be 0
         #     self.old_rankings[ids] = 0
