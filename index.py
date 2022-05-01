@@ -75,12 +75,13 @@ class Indexer:
                 # appends the text from a link to words
                 if len(split_link) == 2:
                     self.remove_link_words.extend(
-                        split_link[1].lower.replace(":", "").split())
+                        split_link[1].lower().replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
                 # ignores links from a page to itself
                 if split_link[0] is not wiki_page.find('title').text.strip():
-                    self.ids_links_titles[page_id].append(split_link[0])
+                    self.ids_links_titles[page_id].append(
+                        split_link[0].strip())
 
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
