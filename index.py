@@ -62,7 +62,7 @@ class Indexer:
             words.extend(re.findall(text_regex, wiki_page.find(
                 'title').text.strip().lower()))  # appends on words from titles
 
-            self.ids_links_titles[page_id] = set()
+            self.ids_links_titles[page_id] = []
             self.remove_link_words = []
             # removes brackets from links, then splits them up by the pipe
             # character: '|', either a list with two items
@@ -78,7 +78,7 @@ class Indexer:
                 # adds link to the ids_links_titles dictionary
                 # ignores links from a page to itself
                 if split_link[0] is not wiki_page.find('title').text.strip():
-                    self.ids_links_titles[page_id].add(split_link[0])
+                    self.ids_links_titles[page_id].append(split_link[0])
 
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
@@ -113,10 +113,10 @@ class Indexer:
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
         temp_dict = self.ids_links_titles.copy()
-        for key in temp_dict:
-            for value in temp_dict[key]:
-                if value not in self.ids_to_titles.values():
-                    del self.ids_links_titles[key][value]
+        for value in temp_dict.values():
+            for element in value:
+                if element not in self.ids_to_titles.values():
+                    list(value).remove(element)
 
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
