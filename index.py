@@ -78,8 +78,9 @@ class Indexer:
                         split_link[1].replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
-                # ignores links from a page to itself
-                if split_link[0] is not wiki_page.find('title').text.strip():
+                # ignores links from a page to itself and ignores links to non-existant pages
+                if split_link[0] is not wiki_page.find('title').text.strip() and \
+                    split_link[0] in self.ids_links_titles.values():
                     self.ids_links_titles[page_id].add(split_link[0])
 
             # removes stop words and stems words while filling the
@@ -98,7 +99,7 @@ class Indexer:
                             self.words_to_doc_relevance[word][page_id] += 1
                             self.word_count_in_page[word] += 1
 
-            # the maximum count of all the words in the page
+            # # the maximum count of all the words in the page
             if len(self.word_count_in_page.values()) == 0:
                 max_word_count_on_page = 0
             else:
