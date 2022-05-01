@@ -1,4 +1,6 @@
+from copy import copy
 from ipaddress import summarize_address_range
+from optparse import TitledHelpFormatter
 import sys
 from tokenize import String
 from warnings import catch_warnings
@@ -112,6 +114,18 @@ class Indexer:
                     self.words_to_doc_relevance[word][page_id] = \
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
+
+        official_titles = self.ids_links_titles.values()
+        copy_ids_links_titles = self.ids_links_titles.copy()
+        for ids_links in self.ids_links_titles:
+            for title in self.ids_links_titles[ids_links]:
+                if title in official_titles:
+                    if title not in copy_ids_links_titles:
+                        copy_ids_links_titles[ids_links] = title
+                    else:
+                        copy_ids_links_titles[ids_links].extend(title)
+        self.ids_links_titles = copy_ids_links_titles.copy()
+
         temp_dict = self.ids_links_titles.copy()
         for value in temp_dict.values():
             for element in value:
