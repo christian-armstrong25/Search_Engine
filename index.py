@@ -73,7 +73,7 @@ class Indexer:
                 # appends the text from a link to words
                 if len(split_link) == 2:
                     self.remove_link_words.extend(
-                        split_link[1].replace(":", "").split())
+                        split_link[1].lower.replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
                 # ignores links from a page to itself
