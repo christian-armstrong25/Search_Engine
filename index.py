@@ -78,9 +78,8 @@ class Indexer:
                         split_link[1].replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
-                # ignores links from a page to itself and ignores links to non-existant pages
-                if split_link[0] is not wiki_page.find('title').text.strip() and \
-                    split_link[0] in self.ids_links_titles.values():
+                # ignores links from a page to itself
+                if split_link[0] is not wiki_page.find('title').text.strip():
                     self.ids_links_titles[page_id].add(split_link[0])
 
             # removes stop words and stems words while filling the
@@ -113,6 +112,11 @@ class Indexer:
                     self.words_to_doc_relevance[word][page_id] = \
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
+        temp_dict = self.ids_links_titles.copy()
+        for key in temp_dict:
+            for value in temp_dict[key]:
+                if value not in self.ids_to_titles.values():
+                    del self.ids_links_titles[key][value]
 
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
