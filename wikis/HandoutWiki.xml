@@ -2,16 +2,16 @@
     <page>
         <title>A</title>
         <id>1</id>
-        <text>[[B]][[C]]</text>
+        <text>the dog bit the man</text>
     </page>
     <page>
         <title>B</title>
         <id>2</id>
-        <text>jkjkjk</text>
+        <text>the dog ate cheese</text>
     </page>
     <page>
         <title>C</title>
         <id>3</id>
-        <text>[[A]]</text>
+        <text>the cheese bit the cheese</text>
     </page>
 </xml>

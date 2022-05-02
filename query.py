@@ -41,11 +41,6 @@ class Querier():
         for i in range(min(10, len(sorted_list))):
             print(str(i + 1) + ". " + self.ids_to_titles[sorted_list[i][0]])
         print("")
-        # sorted_list = self.merge_sort(list(self.ids_to_relevance.items()))
-        # for i in range(min(10, len(sorted_list))):
-        #     print(str(i + 1) + ". " + self.ids_to_titles[sorted_list[i][0]])
-        # print("")
-
 
 if __name__ == "__main__":
     command_index = 0

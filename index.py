@@ -15,6 +15,7 @@ STOP_WORDS = set(stopwords.words('english'))
 
 class Indexer:
     def __init__(self, xml, titles, docs, words) -> None:
+        self.num_args = len(locals())
         self.ids_to_titles = {}  # maps page ids to page titles
         self.ids_links_titles = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
@@ -190,7 +191,7 @@ class Indexer:
 
 
 if __name__ == "__main__":
-    try:
-        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-    except:  # prints a message if less than four arguments
+    if len(sys.argv) < 4:
         print("Fewer than four arguments!")
+    else:
+        Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
