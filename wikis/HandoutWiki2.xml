@@ -1,0 +1,22 @@
+<xml>
+    <page>
+        <title>A</title>
+        <id>0</id>
+        <text>signing a contract creates a contractual obligation</text>
+    </page>
+    <page>
+        <title>B</title>
+        <id>1</id>
+        <text>contract a cold or contract the flu</text>
+    </page>
+    <page>
+        <title>C</title>
+        <id>2</id>
+        <text>water signs are more likely to get cold</text>
+    </page>
+    <page>
+        <title>D</title>
+        <id>3</id>
+        <text>water is cold</text>
+    </page>
+</xml>

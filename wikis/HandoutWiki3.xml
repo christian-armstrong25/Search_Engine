@@ -1,0 +1,22 @@
+<xml>
+    <page>
+        <title>A</title>
+        <id>1</id>
+        <text>[[B]][[D]]</text>
+    </page>
+    <page>
+        <title>B</title>
+        <id>2</id>
+        <text>[[C]][[D]]</text>
+    </page>
+    <page>
+        <title>C</title>
+        <id>3</id>
+        <text>A, B, C, D</text>
+    </page>
+    <page>
+        <title>D</title>
+        <id>4</id>
+        <text>[[A]][[C]]</text>
+    </page>
+</xml>

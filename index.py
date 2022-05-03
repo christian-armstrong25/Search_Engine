@@ -15,7 +15,6 @@ STOP_WORDS = set(stopwords.words('english'))
 
 class Indexer:
     def __init__(self, xml, titles, docs, words) -> None:
-        self.num_args = len(locals())
         self.ids_to_titles = {}  # maps page ids to page titles
         self.ids_links_titles = {}  # maps an id to all the titles it links to
         self.ids_to_pageranks = {}  # maps ids to pageranks
@@ -117,17 +116,6 @@ class Indexer:
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
 
-        official_titles = self.ids_links_titles.values()
-        copy_ids_links_titles = self.ids_links_titles.copy()
-        for ids_links in self.ids_links_titles:
-            for title in self.ids_links_titles[ids_links]:
-                if title in official_titles:
-                    if title not in copy_ids_links_titles:
-                        copy_ids_links_titles[ids_links] = title
-                    else:
-                        copy_ids_links_titles[ids_links].extend(title)
-        self.ids_links_titles = copy_ids_links_titles.copy()
-
         temp_dict = self.ids_links_titles.copy()
         for value in temp_dict.values():
             for element in value:
@@ -181,10 +169,10 @@ class Indexer:
 
         while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
             self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
-            for j in self.weight_dictionary:  # for j in pages
-                self.ids_to_pageranks[j] = 0  # r'(j) = 0
+            for j in self.ids_to_titles:  # for j in pages
+                self.ids_to_pageranks[j] = 0.0  # r'(j) = 0
                 # for k in pages
-                for k in self.weight_dictionary[j]:
+                for k in self.ids_to_titles:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
                     self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *
                                                  self.old_rankings[k])
