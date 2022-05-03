@@ -120,7 +120,7 @@ class Indexer:
         for value in temp_dict.values():
             for element in value:
                 if element not in self.ids_to_titles.values():
-                    list(value).remove(element)
+                    value.remove(element)
 
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
@@ -179,7 +179,10 @@ class Indexer:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 4:
+    sys.argv = ["index.py", "wikis/PageRankExample1.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
+    if len(sys.argv) < 5:
         print("Fewer than four arguments!")
     else:
         Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+        # Indexer("wikis/PageRankExample1.xml",
+        #     "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")

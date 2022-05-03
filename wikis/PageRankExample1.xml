@@ -12,7 +12,7 @@
     <page>
         <title>C</title>
         <id>3</id>
-        <text>[[A|F]]</text>
+        <text>[[A]][[F]]</text>
     </page>
 </xml>
         <!--Expected: Rank(A) = 0.4326, Rank(B) = 0.2340, Rank(C) = 0.3333-->
