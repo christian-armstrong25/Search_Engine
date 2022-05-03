@@ -84,3 +84,59 @@ def test_pagerank_example4():
              "text_files/words.txt").ids_to_pageranks == \
                  {1: 0.0001910685528531874, 2: 0.0001910685528531874,
                  3: 0.0014037069303733162, 4: 0.0020240468017980427}
+
+def test_weights_no_links():
+    assert Indexer("wikis/CustomWiki1.xml",
+             "text_files/titles.txt", "text_files/docs.txt",
+             "text_files/words.txt").weight_dictionary == \
+                 {1: {1: 0.049999999999999996, 2: 0.475, 3: 0.475}, 
+                 2: {1: 0.475, 2: 0.049999999999999996, 3: 0.475}, 
+                 3: {1: 0.475, 2: 0.475, 3: 0.049999999999999996}}
+
+def test_pagerank_no_links():
+    assert Indexer("wikis/CustomWiki1.xml",
+             "text_files/titles.txt", "text_files/docs.txt", 
+             "text_files/words.txt").ids_to_pageranks == \
+                {1: 0.3333333333333333, 2: 0.3333333333333333, 3: 0.3333333333333333}
+
+def test_weights_all_self_links():
+    assert Indexer("wikis/CustomWiki2.xml",
+             "text_files/titles.txt", "text_files/docs.txt", 
+             "text_files/words.txt").weight_dictionary == \
+                 {1: {1: 0.049999999999999996, 2: 0.475, 3: 0.475}, 
+                 2: {1: 0.475, 2: 0.049999999999999996, 3: 0.475}, 
+                 3: {1: 0.475, 2: 0.475, 3: 0.049999999999999996}}
+
+def test_pagerank_all_self_links():
+    assert Indexer("wikis/CustomWiki2.xml",
+             "text_files/titles.txt", "text_files/docs.txt",
+             "text_files/words.txt").ids_to_pageranks == \
+                {1: 0.3333333333333333, 2: 0.3333333333333333, 3: 0.3333333333333333}
+
+def test_weights_duplicate_links():
+    assert Indexer("wikis/CustomWiki3.xml",
+             "text_files/titles.txt", "text_files/docs.txt", 
+             "text_files/words.txt").weight_dictionary == \
+                {1: {1: 0.049999999999999996, 2: 0.049999999999999996, 3: 0.9}, 
+                2: {1: 0.9, 2: 0.049999999999999996, 3: 0.049999999999999996}, 
+                3: {1: 0.049999999999999996, 2: 0.9, 3: 0.049999999999999996}}
+
+def test_pagerank_duplicate_links():
+    assert Indexer("wikis/CustomWiki3.xml",
+             "text_files/titles.txt", "text_files/docs.txt", 
+             "text_files/words.txt").ids_to_pageranks == \
+                {1: 0.3333333333333333, 2: 0.3333333333333333, 3: 0.3333333333333333}
+
+def test_weights_all_nonexistent_links():
+    assert Indexer("wikis/CustomWiki4.xml",
+             "text_files/titles.txt", "text_files/docs.txt", 
+             "text_files/words.txt").weight_dictionary == \
+                {1: {1: 0.049999999999999996, 2: 0.475, 3: 0.475}, 
+                2: {1: 0.475, 2: 0.049999999999999996, 3: 0.475}, 
+                3: {1: 0.475, 2: 0.475, 3: 0.049999999999999996}}
+
+def test_pagerank_all_nonexistent_links():
+    assert Indexer("wikis/CustomWiki4.xml",
+             "text_files/titles.txt", "text_files/docs.txt", 
+             "text_files/words.txt").ids_to_pageranks == \
+                 {1: 0.3333333333333333, 2: 0.3333333333333333, 3: 0.3333333333333333}

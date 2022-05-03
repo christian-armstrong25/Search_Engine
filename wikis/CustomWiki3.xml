@@ -1,0 +1,17 @@
+<xml>
+    <page>
+        <title>First</title>
+        <id>1</id>
+        <text>[[Third]][[Third]]</text>
+    </page>
+    <page>
+        <title>Second</title>
+        <id>2</id>
+        <text>[[First]][[First]]</text>
+    </page>
+    <page>
+        <title>Third</title>
+        <id>3</id>
+        <text>[[Second]][[Second]]</text>
+    </page>
+</xml>

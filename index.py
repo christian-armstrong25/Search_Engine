@@ -30,7 +30,7 @@ class Indexer:
         self.weight_dictionary = {}
         self.calc_weight()
         self.page_rank()
-
+        self.sum = sum(self.ids_to_pageranks.values())
         # writes to the title file
         write_title_file(titles, self.ids_to_titles)
         # writes to the docs file
@@ -72,14 +72,14 @@ class Indexer:
             for link in re.findall(link_regex, wiki_page.find('text').text):
                 split_link = str(link).strip().strip("[[]]").strip().split('|')
 
-                # appends the text from a link to words
+                # adds pipe link to be removed from words
                 if len(split_link) == 2:
                     self.remove_link_words.extend(
-                        split_link[1].lower().replace(":", "").split())
+                        split_link[0].lower().replace(":", "").split())
 
                 # adds link to the ids_links_titles dictionary
                 # ignores links from a page to itself
-                if split_link[0] is not wiki_page.find('title').text.strip():
+                if split_link[0] is not wiki_page.find('title').text.strip() and split_link[0] not in self.ids_links_titles[page_id]:
                     self.ids_links_titles[page_id].append(
                         split_link[0].strip())
 
@@ -168,7 +168,8 @@ class Indexer:
         #     self.ids_to_pageranks[ids] = 1/self.TOTAL_DOCS
 
         while self.distance(self.old_rankings, self.ids_to_pageranks) > self.DELTA:
-            self.old_rankings = self.ids_to_pageranks.copy()  # r <- r'
+            for id in self.ids_to_pageranks:
+                self.old_rankings[id] = self.ids_to_pageranks[id]  # r <- r'
             for j in self.ids_to_titles:  # for j in pages
                 self.ids_to_pageranks[j] = 0.0  # r'(j) = 0
                 # for k in pages
@@ -176,7 +177,6 @@ class Indexer:
                     # r'(j) = r'(j) + weight(k, j) * r(k)
                     self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *
                                                  self.old_rankings[k])
-
 
 if __name__ == "__main__":
     sys.argv = ["index.py", "wikis/PageRankExample1.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]

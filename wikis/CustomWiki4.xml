@@ -1,0 +1,17 @@
+<xml>
+    <page>
+        <title>First</title>
+        <id>1</id>
+        <text>[[Fourth]]</text>
+    </page>
+    <page>
+        <title>Second</title>
+        <id>2</id>
+        <text>[[Fourth]]</text>
+    </page>
+    <page>
+        <title>Third</title>
+        <id>3</id>
+        <text>[[Fourth]]</text>
+    </page>
+</xml>
