@@ -82,8 +82,7 @@ def test_pagerank_example4():
     assert Indexer("wikis/PageRankExample4.xml",
              "text_files/titles.txt", "text_files/docs.txt", 
              "text_files/words.txt").ids_to_pageranks == \
-                 {1: 0.0001910685528531874, 2: 0.0001910685528531874,
-                 3: 0.0014037069303733162, 4: 0.0020240468017980427}
+                {1: 0.0375, 2: 0.0375, 3: 0.46249999999999997, 4: 0.4624999999999999}
 
 def test_weights_no_links():
     assert Indexer("wikis/CustomWiki1.xml",
