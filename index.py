@@ -115,13 +115,11 @@ class Indexer:
                     self.words_to_doc_relevance[word][page_id] = \
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
-
+        
         for id in self.ids_links_titles:
-            for element in self.ids_links_titles[id]:
-                print(element)
-                if element not in self.ids_to_titles.values():
-                    self.ids_links_titles[id].remove(element)
-        print(self.ids_links_titles)
+            for title in self.ids_links_titles[id]:
+                if title not in self.ids_to_titles.values():
+                    self.ids_links_titles[id].remove(title)
 
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
@@ -139,7 +137,6 @@ class Indexer:
         otherwise_weight = (self.EPSILON / self.TOTAL_DOCS)
         for k in self.ids_to_titles:
             self.weight_dictionary[k] = {}
-            print(self.ids_links_titles[k])
             for j in self.ids_to_titles:
                 if len(self.ids_links_titles[k]) == 0 and k != j:
                     self.weight_dictionary[k][j] = nothing_weight
