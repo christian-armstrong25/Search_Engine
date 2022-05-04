@@ -116,8 +116,6 @@ class Indexer:
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
 
-        temp_dict = self.ids_links_titles
-        print('Karl Marx' not in self.ids_to_titles.values())
         for id in self.ids_links_titles:
             for element in self.ids_links_titles[id]:
                 print(element)
