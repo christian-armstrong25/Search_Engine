@@ -116,11 +116,14 @@ class Indexer:
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
 
-        temp_dict = self.ids_links_titles.copy()
-        for value in temp_dict.values():
-            for element in value:
+        temp_dict = self.ids_links_titles
+        print('Karl Marx' not in self.ids_to_titles.values())
+        for id in self.ids_links_titles:
+            for element in self.ids_links_titles[id]:
+                print(element)
                 if element not in self.ids_to_titles.values():
-                    value.remove(element)
+                    self.ids_links_titles[id].remove(element)
+        print(self.ids_links_titles)
 
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
@@ -138,6 +141,7 @@ class Indexer:
         otherwise_weight = (self.EPSILON / self.TOTAL_DOCS)
         for k in self.ids_to_titles:
             self.weight_dictionary[k] = {}
+            print(self.ids_links_titles[k])
             for j in self.ids_to_titles:
                 if len(self.ids_links_titles[k]) == 0 and k != j:
                     self.weight_dictionary[k][j] = nothing_weight
@@ -146,6 +150,7 @@ class Indexer:
                         + ((1 - self.EPSILON) / len(self.ids_links_titles[k]))
                 else:
                     self.weight_dictionary[k][j] = otherwise_weight
+            print(sum(self.weight_dictionary[k].values()))
 
     # finds the euclidian distance between two dictionaries
     def distance(self, old_rankings, new_rankings):
@@ -179,10 +184,10 @@ class Indexer:
                                                  self.old_rankings[k])
 
 if __name__ == "__main__":
-    sys.argv = ["index.py", "wikis/PageRankExample1.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
+    sys.argv = ["index.py", "wikis/SmallWiki2.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
     if len(sys.argv) < 5:
         print("Fewer than four arguments!")
     else:
         Indexer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-        # Indexer("wikis/PageRankExample1.xml",
+        # Indexer("wikis/SmallWiki2.xml",
         #     "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
