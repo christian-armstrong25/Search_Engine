@@ -19,7 +19,7 @@ print(Indexer("wikis/PageRankExample4.xml",
 # Querier("--pagerank", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
 
 
-def test_relevanceHandout():
+def test_relevance_handout():
     assert Indexer("wikis/HandoutWiki.xml",
                    "text_files/titles.txt", "text_files/docs.txt",
                    "text_files/words.txt").words_to_doc_relevance == \
@@ -175,6 +175,7 @@ def test_distance_basic():
                           "text_files/titles.txt", "text_files/docs.txt",
                           "text_files/words.txt").distance(old_rankings, new_rankings) > \
         .2002
+
 
 def test_distance_advanced():
     old_rankings = {
