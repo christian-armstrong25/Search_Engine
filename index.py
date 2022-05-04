@@ -115,11 +115,17 @@ class Indexer:
                     self.words_to_doc_relevance[word][page_id] = \
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
-        
-        for id in self.ids_links_titles:
-            for title in self.ids_links_titles[id]:
-                if title not in self.ids_to_titles.values():
-                    self.ids_links_titles[id].remove(title)
+
+        key_list = self.ids_links_titles.keys()
+        for index in range(len(key_list)):
+            for title in self.ids_links_titles[key_list[index]]:
+                if title not in self.ids_links_titles.values():
+                    self.ids_links_titles[key_list[index]].remove(title)
+
+        # for id in self.ids_links_titles:
+        #     for title in self.ids_links_titles[id]:
+        #         if title not in self.ids_to_titles.values():
+        #             self.ids_links_titles[id].remove(title)
 
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
@@ -178,8 +184,10 @@ class Indexer:
                     self.ids_to_pageranks[j] += (self.weight_dictionary[k][j] *
                                                  self.old_rankings[k])
 
+
 if __name__ == "__main__":
-    sys.argv = ["index.py", "wikis/SmallWiki2.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
+    sys.argv = ["index.py", "wikis/SmallWiki2.xml", "text_files/titles.txt",
+                "text_files/docs.txt", "text_files/words.txt"]
     if len(sys.argv) < 5:
         print("Fewer than four arguments!")
     else:
