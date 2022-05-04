@@ -116,14 +116,16 @@ class Indexer:
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
 
-        key_list = self.ids_links_titles.keys()
-        for index in range(len(key_list)):
+        key_list = list(self.ids_links_titles.keys())
+        len_o = len(key_list)
+        for index in range(len_o):
             for title in self.ids_links_titles[key_list[index]]:
                 if title not in self.ids_links_titles.values():
                     self.ids_links_titles[key_list[index]].remove(title)
 
+        # clone = self.ids_links_titles.copy()
         # for id in self.ids_links_titles:
-        #     for title in self.ids_links_titles[id]:
+        #     for title in clone[id]:
         #         if title not in self.ids_to_titles.values():
         #             self.ids_links_titles[id].remove(title)
 
