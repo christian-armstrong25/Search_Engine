@@ -1,4 +1,5 @@
 from copy import copy
+from hashlib import new
 from ipaddress import summarize_address_range
 from optparse import TitledHelpFormatter
 import sys
@@ -116,19 +117,16 @@ class Indexer:
                         self.words_to_doc_relevance[word][page_id] / \
                         max_word_count_on_page
 
-        key_list = list(self.ids_links_titles.keys())
-        len_o = len(key_list)
-        for index in range(len_o):
-            for title in self.ids_links_titles[key_list[index]]:
-                if title not in self.ids_links_titles.values():
-                    self.ids_links_titles[key_list[index]].remove(title)
-
-        # clone = self.ids_links_titles.copy()
-        # for id in self.ids_links_titles:
-        #     for title in clone[id]:
-        #         if title not in self.ids_to_titles.values():
-        #             self.ids_links_titles[id].remove(title)
-
+        new_dict = {}
+        for every_id in list(self.ids_links_titles.keys()):
+            new_dict[every_id] = []
+            for link in self.ids_links_titles[every_id]:
+                if link in self.ids_to_titles.values():
+                    if every_id in new_dict:
+                        new_dict[every_id].append(link)
+        for id in new_dict:
+            self.ids_links_titles[id] = new_dict[id]
+                    
     def calc_relevance(self):
         # multiplies each tf value in the words_to_doc_relevance dictionary by
         # the idf score of the word the tf value is calculated from, turning
@@ -153,7 +151,6 @@ class Indexer:
                         + ((1 - self.EPSILON) / len(self.ids_links_titles[k]))
                 else:
                     self.weight_dictionary[k][j] = otherwise_weight
-            print(sum(self.weight_dictionary[k].values()))
 
     # finds the euclidian distance between two dictionaries
     def distance(self, old_rankings, new_rankings):
