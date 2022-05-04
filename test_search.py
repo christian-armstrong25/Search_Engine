@@ -175,3 +175,22 @@ def test_distance_basic():
                           "text_files/titles.txt", "text_files/docs.txt",
                           "text_files/words.txt").distance(old_rankings, new_rankings) > \
         .2002
+
+def test_distance_advanced():
+    old_rankings = {
+        1: .4330,
+        2: .2337,
+        3: .3333
+    }
+    new_rankings = {
+        1: .4326,
+        2: .2340,
+        3: .3333
+    }
+    assert Indexer("wikis/CustomWiki4.xml",
+                   "text_files/titles.txt", "text_files/docs.txt",
+                   "text_files/words.txt").distance(old_rankings, new_rankings) < \
+        .0006 and Indexer("wikis/CustomWiki4.xml",
+                          "text_files/titles.txt", "text_files/docs.txt",
+                          "text_files/words.txt").distance(old_rankings, new_rankings) > \
+        .0004
