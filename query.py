@@ -49,7 +49,8 @@ class Querier():
         """
         for word in search: # loop through every word given by the user in their search query
             word = PorterStemmer().stem(word) # stem the word
-            if word not in STOP_WORDS and word in self.words_to_doc_relevance: # remove stop words and ensure word is in the corpus
+            if word not in STOP_WORDS and word in self.words_to_doc_relevance: 
+                # remove stop words and ensure word is in the corpus
                 for id in self.words_to_doc_relevance[word]: # loop through every page that the word is found in
                     if id in self.ids_to_relevance: # if the page is already initialized in the dictionary
                         self.ids_to_relevance[id] += self.words_to_doc_relevance[word][id]
@@ -58,7 +59,7 @@ class Querier():
 
         if pagerank == "--pagerank": # if "--pagerank" is passed in
             for docs in self.ids_to_relevance: # loop through every document corresponding to the query words
-                self.ids_to_relevance[docs] *= self.ids_to_pageranks[docs] # multiply each page's relevance by its pagerank value
+                self.ids_to_relevance[docs] += self.ids_to_pageranks[docs] # multiply each page's relevance by its pagerank value
 
     def print_top_10(self):
         """ Prints out the top 10 pages as results for the user's search query

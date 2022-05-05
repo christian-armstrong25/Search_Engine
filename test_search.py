@@ -2,22 +2,9 @@ from sys import argv
 from index import *
 from query import *
 
-# sys.argv = ["python3", "index.py", "wikis/MedWiki.xml",
-#              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
 # Indexer("wikis/MedWiki.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
-# # print(Indexer().ids_to_titles)
-# print(Indexer("wikis/SmallWiki.xml",
-#               "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_links_titles)
-# print(Indexer("wikis/HandoutWiki2.xml",
-#             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").words_to_doc_relevance)
-# print(Indexer("wikis/HandoutWiki3.xml",
-#              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").weight_dictionary)
-print(Indexer("wikis/PageRankExample1.xml",
-              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_links_titles)
 
-# sys.argv = ["query.py", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
-# Querier("--pagerank", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
-
+Querier("--pagerank", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
 
 def test_relevance_handout():
     assert Indexer("wikis/HandoutWiki.xml",
@@ -201,3 +188,9 @@ def test_links():
               "text_files/titles.txt", "text_files/docs.txt", 
               "text_files/words.txt").ids_links_titles == \
                 {1: ['B', 'C'], 2: [], 3: ['A']}
+
+def test_links2():
+    assert Indexer("wikis/HandoutWiki3.xml",
+              "text_files/titles.txt", "text_files/docs.txt",
+              "text_files/words.txt").ids_links_titles == \
+                {1: ['B', 'D'], 2: ['C', 'D'], 3: [], 4: ['A', 'C']}

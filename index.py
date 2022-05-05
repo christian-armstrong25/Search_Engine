@@ -86,7 +86,7 @@ class Indexer:
                 # adds left-of-pipe link to list of words to be removed from corpus
                 if len(split_link) == 2:
                     self.remove_link_words.extend(
-                        split_link[0].lower().replace(":", "").split()) # remove colons from meta links
+                        split_link[0].lower().replace(":", " ").split()) # remove colons from meta links
 
                 # adds link to the ids_links_titles dictionary while 
                 # ignoring both duplicate links and links from a page to itself
@@ -94,12 +94,15 @@ class Indexer:
                     split_link[0] not in self.ids_links_titles[page_id]:
                         self.ids_links_titles[page_id].append(
                             split_link[0].strip())
+            
+            for word in self.remove_link_words:
+                word = PorterStemmer().stem(word)
 
             # removes stop words and stems words while filling the
             # words_to_doc_relevance and word_count_in_page dictionaries
             for word in words:
                 if word not in STOP_WORDS:  # removes stop words
-                    PorterStemmer().stem(word) # stem words
+                    word = PorterStemmer().stem(word) # stem words
                     if word in self.remove_link_words: # remove left-of-pipe link words
                         self.remove_link_words.remove(word)
                     elif word not in self.words_to_doc_relevance:  # adds to dicts
@@ -114,7 +117,7 @@ class Indexer:
                             self.word_count_in_page[word] += 1
             
             # account for empty pages and store the max word count 
-            if len(self.word_count_in_page.values()) == 0:
+            if self.word_count_in_page == {}:
                 max_word_count_on_page = 0
             else:
                 max_word_count_on_page = max(self.word_count_in_page.values())
