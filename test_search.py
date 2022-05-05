@@ -12,8 +12,8 @@ from query import *
 #             "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").words_to_doc_relevance)
 # print(Indexer("wikis/HandoutWiki3.xml",
 #              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").weight_dictionary)
-print(Indexer("wikis/PageRankExample4.xml",
-              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_to_pageranks)
+print(Indexer("wikis/PageRankExample1.xml",
+              "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt").ids_links_titles)
 
 # sys.argv = ["query.py", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt"]
 # Querier("--pagerank", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
@@ -195,3 +195,9 @@ def test_distance_advanced():
                           "text_files/titles.txt", "text_files/docs.txt",
                           "text_files/words.txt").distance(old_rankings, new_rankings) > \
         .0004
+
+def test_links():
+    assert Indexer("wikis/PageRankExample1.xml",
+              "text_files/titles.txt", "text_files/docs.txt", 
+              "text_files/words.txt").ids_links_titles == \
+                {1: ['B', 'C'], 2: [], 3: ['A']}
