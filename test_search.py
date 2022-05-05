@@ -4,7 +4,7 @@ from query import *
 
 # Indexer("wikis/MedWiki.xml", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
 
-Querier("--pagerank", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
+Querier("", "text_files/titles.txt", "text_files/docs.txt", "text_files/words.txt")
 
 def test_relevance_handout():
     assert Indexer("wikis/HandoutWiki.xml",

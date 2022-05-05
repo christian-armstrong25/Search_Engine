@@ -1,0 +1,44 @@
+Task 4-b:
+Search Engines perform better for accessibility because anyone can use a search engine no matter their creed; 
+all it takes is the right tech and the possibilities are limitless with what can be accessed or researched. 
+Community pages can’t quite live up to this because community pages are inherently going to skew communities 
+towards community constituents in a way such that outsiders may not be able to fully appreciate or experience 
+that page as much as the people that the pages are “meant” for. For security, Community Pages are the best 
+because community pages can have moderators, administrators, and the community itself to stay safe and welcoming 
+while also maintaining a place for peace. Search engines are more vulnerable to random links, sites that 
+artificially boost rankings, and random advertisements/malware that could harm the integrity of the engine. 
+
+4-c:
+PageRank makes assumptions about word frequencies and the frequency of links to certain pages, assumptions 
+that could be used on a large-scale basis but could fall flat on a micro scale. I do think his statement is 
+accurate; everything is algorithmic nowadays and you often don’t see a truly unbiased view from systems on 
+the Internet. Even if a person looks up something specific to them, there will be biases in the search that 
+can lead to astray pages and micro-inaccuracies for an oblivious user. Thus, a gap can be created and perpetuated. 
+Search ultimately cares about profit and sustainability; it can achieve these things by boosting certain results 
+and keeping certain results away so that user longevity is attained without any other better alternatives. 
+
+Task 5-d:
+Fowler’s argument was certainly made clear with the “jeans” search; a large ad came up first and then Google Maps 
+and then a “People Also Ask” and then finally a normal link. While no ads came up for “climate change is fake”, 
+what did come up were some sites for pages that refused to believe the severity of climate change or even the 
+existence of climate change. The first link, a Forbes article, had a “clickbait” title that would likely give the 
+wrong impression to people who are looking either for validation or for the “truth”, and this inherent bias is 
+what Noble was mentioning in her book. And again, “buy zofran” comes up with more ads first instead of more direct 
+sources, strengthening Fowler’s argument. 
+
+5-e:
+The conduit theory prioritizes the search engine’s perspective because what the engine ranks is what’s displayed, 
+no matter the bias of the user or the websites it shows. The editor theory prioritizes the website’s perspective, 
+since now it’s a matter of what is most interesting and “important” from a website, with rankings that could be 
+manipulated by editors to show a display that helps websites and profits rather than the user or the engine itself. 
+The advisor theory prioritizes the user’s perspective because it inherently only tries to show the user what they 
+want to see and know. It caters to the user even at the sacrifice of neutrality and differing viewpoints. 
+
+5-f: 
+The theory that best describes the aims of engines today is the editor theory, with developers like Google and 
+corporations that own websites being the editors. Engines want profit and engagement most of all, and it does this 
+by pushing information that is the most interesting rather than what is most pertinent. Noble and Fowler would 
+definitely support the conduit theory the most; Noble only wanted to plan a fun time for her children, which is what 
+the conduit theory would grant her, and Fowler didn’t want the editor theory to bog results with ads, so the conduit 
+theory would be best as well. I agree with them: conduit theory is inherently what search engines should strive to 
+achieve if engines are truly to be tools for seeking unbiased knowledge.
