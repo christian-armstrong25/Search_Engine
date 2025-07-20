@@ -1,11 +1,14 @@
-from ipaddress import summarize_address_range
+import math
+import re
 import sys
 import xml.etree.ElementTree as et
-import re
-from file_io import write_docs_file, write_title_file, write_words_file
-from nltk.stem import PorterStemmer
+from ipaddress import summarize_address_range
+
 from nltk.corpus import stopwords
-import math
+from nltk.stem import PorterStemmer
+
+from file_io import write_docs_file, write_title_file, write_words_file
+
 STOP_WORDS = set(stopwords.words('english'))
 
 
@@ -63,11 +66,10 @@ class Indexer:
 
             words = [] # list of all the words in the current page
             self.word_count_in_page = {} # dictionary from word to count on current page
-
             # adds the current page's id and title to the ids_to_titles dictionary
             self.ids_to_titles[page_id] = wiki_page.find(
                 'title').text.strip()
-
+            
             # tokenize words
             words.extend(re.findall(text_regex, wiki_page.find(
                 'text').text.strip().lower()))  # adds words from texts
@@ -90,7 +92,7 @@ class Indexer:
 
                 # adds link to the ids_links_titles dictionary while 
                 # ignoring both duplicate links and links from a page to itself
-                if split_link[0] is not wiki_page.find('title').text.strip() and \
+                if split_link[0] is not wiki_page.find('title').text.strip({}) and \
                     split_link[0] not in self.ids_links_titles[page_id]:
                         self.ids_links_titles[page_id].append(
                             split_link[0].strip())
