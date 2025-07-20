@@ -1,31 +1,37 @@
 # Wiki Search Engine
 
 ## Group Members
+
 - Christian Armstrong
 - Daniel Liu
 
 ## Introduction
+
 This project implements a simple search engine for Wikipedia-like XML dumps. It indexes pages, computes relevance and importance scores, and allows users to search for pages using a command-line interface.
 
 ## Usage
 
 ### 1. Indexing
+
 Run the indexer to process an XML wiki dump and generate index files:
 
 ```
 python index.py <XML filepath> <titles filepath> <docs filepath> <words filepath>
 ```
+
 - `<XML filepath>`: Path to the XML file to index.
 - `<titles filepath>`: Output file for ID-Title pairs.
 - `<docs filepath>`: Output file for ID-PageRank pairs.
 - `<words filepath>`: Output file for Word-ID-Relevance triples.
 
 ### 2. Querying
+
 Run the querier to search the indexed data:
 
 ```
 python query.py [--pagerank] <titleIndex> <documentIndex> <wordIndex>
 ```
+
 - `--pagerank` (optional): If present, search results consider PageRank in ranking.
 - `<titleIndex>`: File with ID-Title pairs (from indexer).
 - `<documentIndex>`: File with ID-PageRank pairs (from indexer).
@@ -36,6 +42,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 ## Algorithms
 
 ### TF-IDF (Term Frequency-Inverse Document Frequency)
+
 - **Purpose:** Measures how important a word is to a document in the corpus.
 - **How:**
   - For each word in a page, compute term frequency (TF) as the count of the word divided by the max word count in that page.
@@ -44,6 +51,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
   - Stop words and numbers are excluded; words are stemmed.
 
 ### PageRank
+
 - **Purpose:** Measures the importance of a page based on the link structure.
 - **How:**
   - Build a directed graph where nodes are pages and edges are links between them.
@@ -54,23 +62,27 @@ You will be prompted to enter search queries. Type `:quit` to exit.
     - Links to non-existent pages are ignored.
 
 ### Query Scoring
+
 - For each query, compute a relevance score for each page based on the sum of TF-IDF scores for the query words.
 - If `--pagerank` is specified, add the PageRank score to the relevance score.
 - Return the top 10 results (or fewer if less available).
 
 ## Features
+
 - Excludes numbers and stop words from indexing.
 - Handles edge cases in link graph (self-links, dead links, duplicates).
 - Stems words for better matching.
 - Interactive REPL for searching.
 
 ## Testing & Edge Cases
+
 - Handles empty queries, queries with only spaces, gibberish, punctuation, and numbers.
 - Tested with multiple and duplicate words, case insensitivity, and leading/trailing spaces.
 
 ## Example Test Results
 
 **Query (no pagerank):** `computer science`
+
 1. LEO (computer)
 2. Malware
 3. Motherboard
@@ -83,6 +95,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Foonly
 
 **Query (pagerank):** `computer science`
+
 1. Islamabad Capital Territory
 2. Java (programming language)
 3. Portugal
@@ -95,6 +108,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Isaac Asimov
 
 **Query (no pagerank):** `testing results`
+
 1. JUnit
 2. GRE Physics Test
 3. Median lethal dose
@@ -107,6 +121,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Flying car (aircraft)
 
 **Query (pagerank):** `testing results`
+
 1. Kuomintang
 2. Netherlands
 3. Northern Hemisphere
@@ -119,6 +134,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Manhattan Project
 
 **Query (no pagerank):** `dog cheese man fight house`
+
 1. Isle of Man
 2. Cuisine of the Midwestern United States
 3. Limburg
@@ -131,6 +147,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Enter the Dragon
 
 **Query (pagerank):** `dog cheese man fight house`
+
 1. Neolithic
 2. Netherlands
 3. Isle of Man
@@ -143,6 +160,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Normandy
 
 **Query (no pagerank):** `dog dog dog dog`
+
 1. Morphology (linguistics)
 2. Mustelidae
 3. Kyle MacLachlan
@@ -155,6 +173,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Novial
 
 **Query (pagerank):** `dog dog dog dog`
+
 1. Morphology (linguistics)
 2. North Pole
 3. Neolithic
@@ -167,21 +186,27 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Kyle MacLachlan
 
 **Query (no pagerank):** `""` (empty)
+
 - No results
 
 **Query (no pagerank):** ` " "` (spaces)
+
 - No results
 
 **Query (no pagerank):** `ja;sldkfj;alksdjfa;sdlkf` (gibberish)
+
 - No results
 
 **Query (no pagerank):** `body?!?` (punctuation)
+
 - No results
 
 **Query (no pagerank):** `17208372` (numbers)
+
 - No results
 
 **Query (no pagerank):** ` hello` (leading space)
+
 1. Java (programming language)
 2. Enjambment
 3. Shoma Morita
@@ -194,6 +219,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Kareem Abdul-Jabbar
 
 **Query (no pagerank):** `hello`
+
 1. Java (programming language)
 2. Enjambment
 3. Shoma Morita
@@ -206,6 +232,7 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 10. Kareem Abdul-Jabbar
 
 **Query (no pagerank):** `HELLO` (all caps)
+
 1. Java (programming language)
 2. Enjambment
 3. Shoma Morita
@@ -220,4 +247,5 @@ You will be prompted to enter search queries. Type `:quit` to exit.
 ---
 
 ## Known Bugs
+
 None
